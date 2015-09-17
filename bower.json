@@ -1,0 +1,12 @@
+{
+  "name": "maverick",
+  "private": true,
+  "dependencies": {
+    "modernizr": "~2.8.1",
+    "material-design-lite": "~1.0.4"
+  },
+  "devDependencies": {
+    "chai": "~3.2.0",
+    "mocha": "~2.2.5"
+  }
+}
