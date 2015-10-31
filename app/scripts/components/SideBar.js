@@ -6,7 +6,11 @@ class SideBar extends Component{
 
 		return 	<div className="sidebar">
 					<header className="sidebar__header">Blocks</header>
-					<div className="sidebar__content">{this.props.children}</div>
+					<div className="sidebar__content">
+						<div className="block-list">
+							{this.props.children}
+						</div>
+					</div>
 					<footer className="sidebar__footer"></footer>
 				</div>;
 	

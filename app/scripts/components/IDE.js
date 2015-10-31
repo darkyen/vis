@@ -1,26 +1,27 @@
 import React, {Component} from 'react';
+import _ from 'lodash';
 import MDL from 'react-mdl';
 import SideBar from './SideBar';
+import {Container} from 'flux/utils';
 import CodeEditor from './CodeEditor';
 import CodeRunner from './CodeRunner';
-import MathematicalOperationBlock from './MathematicalOperationBlock';
-import blockSpec from './blockSpec';
-import {Container} from 'flux/utils';
 import fileStore from '../stores/fileStore';
-import _ from 'lodash';
+import NodeComponent from './nodes/NodeComponent';
+import {blocks, builder} from '../conductor';
 
 class IDE extends Component{
+
+	constructor(props){
+		super(props);
+		this.__creatorBlocks = blocks.map((def)=>{
+			return (new builder.Block(def)).serialize();
+		});
+	}
+
 	renderAvailableScriptBlocks(){
-		return 	<ul className="block-list">
-					{_.values(blockSpec).map($class => {
-						return _.values($class).map(BlockComponentClass => {
-						// console.log('classnaime', BlockComponentClass);
-						return  <BlockComponentClass 
-									isDummy={true} 
-								/>
-						})
-					})}
-				</ul>;
+		return this.__creatorBlocks.map((node) => {
+			return <NodeComponent node={node} isDummy={true}/>
+		});
 	}
 
 	render(){
@@ -34,7 +35,7 @@ class IDE extends Component{
                     	<SideBar>
                     		{this.renderAvailableScriptBlocks()}
                     	</SideBar>
-                    	<CodeEditor code={this.props.file.code}></CodeEditor>
+                    	<CodeEditor file={this.props.file}></CodeEditor>
                     	<CodeRunner></CodeRunner>
                     </MDL.Content>
 				</MDL.Layout>;	

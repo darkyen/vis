@@ -1,116 +1,16 @@
 import _ from 'lodash';
+import {builder} from '../conductor';
 import blockDispatcher from '../dispatchers/Dispatcher';
 import {Store} from 'flux/utils';
-import basicOperations from '../lib/basicOperations';
 
-let blockDefSpec = {
-	'$ctrl': {
-		'$if': {
-			oprClassDef: '$ctrl',
-			oprName: '$if',
-			meta: {
-				condition: {},
-				body: []
-			}
-		}
-	},
-	'$val':{
-		'$cns': {
-			oprClassDef: '$val',
-			oprName: '$cns',
-			meta:{
-				value: 1
-			}
-		},
-		'$set': {
-			oprClassDef: '$val',
-			oprName: '$set',
-			meta: {
-				name: '',
-				value: {}
-			}
-		}
-	},
-	'$arit': {}
-};
-
-basicOperations.forEach(spec => {
-	blockDefSpec['$arit'][spec.operator] = {
-		oprClassDef: '$arit',
-		oprName: spec.operator,
-		meta: {
-			operands: []
-		}
-	}
-});
+let {File} = builder;
 
 class FileStore extends Store{
 	constructor(dispatcher){
 		super(dispatcher);
-		let fileData = localStorage.currentFile;
-		if( fileData ){
-			this.file = this.loadFile(fileData);
-			return;
-		}
-		this.file = this.newFile();
+		this.file = new File();
 	}
-	loadFile(fileData){
-		return JSON.parse(fileData);
-	}
-	newFile(){
-		return {
-			name: 'New File',
-			code: [],
-			packages: {
-				npm: {},
-				services: {},
-				cylon: {}
-			}
-		};
-	}
-	
-	getNodeAtPath(path){
-		let parts = path.split('.');
-		if( parts[0] !== '$' ){
-			throw new Error('Only absolute paths supported so-far');
-		}
-		
-		parts.shift();
-		
-		// yes this is ugly
-		// yes future self you wrote this
-		// yes future self you were really
-		// this stupid when doing so
-		//
-		// the only reason this following code
-		// was written was excitement to finish the
-		// job.
 
-		return parts.reduce((obj, part) => {
-			console.log(obj, part);
-			if( !obj || ( !Array.isArray(obj) && !obj.meta)){
-				return null;
-			}
-			return Array.isArray(obj)?obj[part]:obj.meta[part];
-		}, this.file.code);
-	}
-	
-	setNodeAtPath(node, path){
-		let parts = path.split('.');
-		let insertionPoint = parts.pop();
-		let insertionParent = this.getNodeAtPath(parts.join('.'));
-
-		if( !insertionParent ){
-			throw new Error('Do not know, Where to insert ?');
-		}
-
-		if( Array.isArray(insertionParent) ){
-			insertionParent[insertionPoint] = node;
-			return;
-		}
-
-		insertionParent.meta[insertionPoint] = node;
-	}
 
 	onBlockDropped({oprClassDef, oprName, dropPath}){
 		console.log(oprClassDef, oprName);
@@ -121,6 +21,7 @@ class FileStore extends Store{
 			throw new Error("Block not defined " + oprClassDef + " " + oprName );
 		}
 		this.setNodeAtPath(node, dropPath);
+		console.log('changed');
 		this.__emitChange();
 	}
 
@@ -135,6 +36,7 @@ class FileStore extends Store{
 	}
 	__onDispatch(action){
 			/* do nothing */
+		console.log('dispatcher heared', action);
 		let {type, payload} = action;
 		switch(type){
 			case 'block-dropped': 

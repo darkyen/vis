@@ -103,135 +103,70 @@ body {
   .block-list{
     padding: 0px 10px;
     list-style: none;
-    > div{
+    .block{
       margin: 10px 0px;
     }
   }
 }
 
-.script-block{
-  border-left: 4px solid teal;
-  border-right: 0;
-  display: inline-flex;
-  font-family: 'Source Code Pro', monospace !important;
-  
-  &__children{
-    min-height: 48px;
-    padding: 5px;
-    display: flex;
-    padding-top: 0px;
-  }
-  
-  &__header{
-    padding: 5px;
-  }
-  .script-block &{
-    display: flex;
-  }
-}
-
-.control-block{
-  border-left-color: unquote("rgb(#{$palette-yellow-700})");
-  background: unquote("rgb(#{$palette-yellow-400})");
-}
-
-.condition-block{
-  padding: 5px;
-  background: unquote("rgb(#{$palette-green-400})");
+.flex{
   display: flex;
-  align-items: center;
-  &__equation-container{
-    flex: 1;
-    min-width: 28px;   
-    height: 16px;
-    margin: 0px 5px;
-    background: rgba(0,0,0,0.4);
+  &--horizontal{
+    flex-direction: row;
   }
-
-  &__title{
-    padding: 0px 5px;
-  }
-
-}
-
-.event-block{
-  display: block;
-  &__title{
-    margin: 0px;
-  }
-}
-
-.if-block{
-  min-width: 200px;
-  flex-direction: column;
-  
-  .script-block__children{
-    flex: 1;
-  }
-
-  &__condition-container {
-    display: flex;
+  &--items-center{
     align-items: center;
   }
-  &__title{
-    padding-right: 5px;
-  }
-}
-
-.value-block{
-  padding: 5px;
-  background: unquote("rgb(#{$palette-teal-200})");
-  border-left: 4px solid unquote("rgb(#{$palette-teal-600})");
-  display: flex;
-  align-items: center;
 }
 
 .block{
-  .mdl-textfield__input{
-    font-size: 14px;
-    font-family: 'Source Code Pro', monospace;
-  }
+  padding: 5px;
+  background: #fff;
+  font-family: 'Source Code Pro', monospace ;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 
-  .mdl-textfield{
-    flex: 1;
-    width: auto;
-    margin-top: -16px;
-    margin-bottom: -16px;
-  }
-  
-  .block-text{
-    font-size: 14px;
-    padding-right: 5px;
-  }
-  
-  .block-input-container{
-    display: inline-flex;
-    flex: 1;
-  }
-}
-
-.block-drop-zone{
-  align-items: inherit;
-  border: 1px ridge rgba(0, 0, 0, 0.2);
-  background: rgba(0, 0, 0, 0.2);
-  flex: 1;
-
-  &--all{
-    background: transparent;
+  &--flow{
+    background: #dd0;
   }
 
   &--value{
-    align-self: stretch;
-    background: unquote("rgb(#{$palette-teal-600})");
-  }
-  
-  &--script{
-    display: block;
-    flex-wrap: wrap;
+    background: #9d8;
   }
 
-  &--variable{
+}
 
-  }
+.field{
+  border: 1px solid #000;
+  background: #fff;
+  min-height: 18px;
+  margin: 0px 5px;
+  padding: 4px;
+  flex: 1;
+}
 
+.text{
+  margin: 0px 5px;
+}
+
+.list{
+  border: 1px solid #000;
+  background: #fff;
+}
+
+.block__part{
+  margin: 5px;
+}
+
+.block__part + .block__part{
+  margin-top: 5px;
+}
+
+.list:empty{
+  min-height: 80px;
+}
+
+.block-drop-zone{
+  flex: 1;
+  display: inline-flex;
 }

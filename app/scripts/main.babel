@@ -1,4 +1,5 @@
 import React from 'react';
 import 'react-mdl/extra/material';
 import App from './components/App';
+
 React.render(<App />, document.getElementById('foo'));

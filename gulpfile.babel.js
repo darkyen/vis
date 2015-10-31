@@ -9,6 +9,7 @@ import del from 'del';
 import {stream as wiredep} from 'wiredep';
 import source from 'vinyl-source-stream';
 import ghPages from 'gulp-gh-pages';
+import buffer from 'vinyl-buffer';
 import gutil from 'gulp-util';
 import chalk from 'chalk';
 
@@ -53,6 +54,9 @@ var doBundle = function(target, name='main.js', dest='.tmp/scripts') {
       gutil.log('Browserify Error \n', e.toString() , '\n' + e.codeFrame);
     })
     .pipe(source(name))
+    .pipe(buffer())
+    .pipe($.sourcemaps.init({ loadMaps: true}))
+    .pipe($.sourcemaps.write())
     .pipe(gulp.dest(dest));
 }
 
@@ -76,10 +80,13 @@ var watchBundle = function(target, name='main.js', dest='.tmp/scripts') {
 
 function babelize(outputDir = '.tmp'){
   return () => {
-    let opts = isWatching?watchify.args:{};
-    let extensions = ['.js', '.json', '.babel'];
+
+    let opts        = isWatching?watchify.args:{};
+    let extensions  = ['.js', '.json', '.babel'];
+    
     opts.extensions = extensions;
-    let bundle = browserify(opts);
+    opts.debug      = true;
+    let bundle      = browserify(opts);
   
     if( isWatching ){
       bundle = watchify(bundle);
