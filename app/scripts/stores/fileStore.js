@@ -12,16 +12,8 @@ class FileStore extends Store{
 	}
 
 
-	onBlockDropped({oprClassDef, oprName, dropPath}){
-		console.log(oprClassDef, oprName);
-
-		let node = _.cloneDeep(blockDefSpec[oprClassDef][oprName]);
-		
-		if( !node ){
-			throw new Error("Block not defined " + oprClassDef + " " + oprName );
-		}
-		this.setNodeAtPath(node, dropPath);
-		console.log('changed');
+	onBlockCreated({blockType, blockName, dropPath}){
+		this.file.insertBlockAtPath({blockType, blockName}, dropPath);
 		this.__emitChange();
 	}
 
@@ -39,8 +31,8 @@ class FileStore extends Store{
 		console.log('dispatcher heared', action);
 		let {type, payload} = action;
 		switch(type){
-			case 'block-dropped': 
-				this.onBlockDropped(payload);
+			case 'block-created': 
+				this.onBlockCreated(payload);
 				break;
 			case 'block-moved': 
 				this.onBlockMoved(payload);
@@ -55,12 +47,12 @@ class FileStore extends Store{
 	}
 
 	getState(){
-		localStorage.currentFile = JSON.stringify(this.file);
-		return _.cloneDeep(this.file);
+		let state = this.file.toObject();
+		localStorage.currentFile = JSON.stringify(state);
+		console.log(state);
+		return state;
 	}
 }
 
 let fileStore = new FileStore(blockDispatcher);
-console.log(fileStore);
-
 export default fileStore;

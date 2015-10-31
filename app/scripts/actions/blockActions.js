@@ -27,7 +27,7 @@ let blockActions = {
 
 	// Drop blocks.
 	dropBlock(item, path){
-		let type = 'block-dropped';
+		let type = 'block-created';
 		let payload = null;
 
 		if( item.isDummy !== true ){

@@ -8,28 +8,10 @@ import BlockDropZone from '../BlockDropZone';
 import {blocks} from '../../conductor/';
 import {DragSource} from 'react-dnd';
 import ItemTypes from '../../constants/ItemTypes';
+import getBlockSpec from '../../conductor/utils/getBlockSpec';
 
 // The following function Handles solely the ui part of the block equation
 // For the compiler visit conductor.js and look at create interpreter
-
-let blockSpecMap = blocks.reduce( (blockMap, blockSpec) => {
-	let {blockType, blockName} = blockSpec.spec;
-	blockMap[blockType] = blockMap[blockType] || {};
-	blockMap[blockType][blockName] = blockSpec;
-	return blockMap;
-}, {});
-
-let getBlockSpec = (blockType, blockName) =>{
-	if( !blockSpecMap[blockType] ){
-		throw new Error(`blockType ${blockType}is not in the dictionary`); 
-	}
-
-	if( !blockSpecMap[blockType][blockName] ){
-		throw new Error(`blockType ${blockType} does not contain ${blockName}`); 
-	}
-
-	return blockSpecMap[blockType][blockName];
-}
 
 const blockSource = {
 	beginDrag(props, monitor, component){

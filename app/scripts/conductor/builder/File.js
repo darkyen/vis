@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import List from './List';
+import Block from './Block';
 import {NODE_TYPES, BLOCK_TYPES} from '../core';
+import getBlockSpec from '../utils/getBlockSpec';
 
 class File{
 	constructor(fileString){
@@ -40,6 +42,16 @@ class File{
 
 		return node;
 	}
+	
+	insertBlockAtPath({blockType, blockName}, path){
+		let spec  = getBlockSpec(blockType, blockName);
+		let node  = new Block(spec);
+		let parts = path.split('.');
+		// path to parent
+		let insertionPropName = parts.pop();
+		let parentNode   = this.getNodeAtPath(parts);
+		parentNode.mountProp(insertionPropName, node);
+	}
 
 	__create(){
 		let _root = new List({
@@ -66,6 +78,7 @@ class File{
 
 	toObject(){
 		let {codeVersion, code, dependencies, name} = this;
+		code = code.serialize();
 		return {codeVersion, code, dependencies, name};
 	}
 

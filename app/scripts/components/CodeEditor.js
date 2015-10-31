@@ -23,7 +23,7 @@ class CodeEditor extends Component{
 					<BlockDropZone 
 						className="code-editor__content" 
 						valuePropType={topLevelPropTypes}
-						path={"$"}
+						path={"$.0"}
 					>
 						<NodeComponent path="$" node={file.code}/>
 					</BlockDropZone>

@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import core from '../core';
 import {createScope} from './scope';
+import getBlockSpec from '../utils/getBlockSpec';
+
 let {
 	NODE_TYPES,
 	DATA_TYPES,
@@ -27,27 +29,10 @@ class Compiler{
 	// Set the supported block / block type for
 	// this type of compilation -- block types 
 	// are required for props and stuff 
-	setBlocks(blockList){
-		console.log(blockList);
-		this.blocks =  blockList.reduce( (blocks, blockSpec) => {
-			let {blockType, blockName} = blockSpec.spec;
-			blocks[blockType] = blocks[blockType] || {};
-			blocks[blockType][blockName] = blockSpec;
-			return blocks;
-		}, this.blocks);
-	}
 		
 	// Just get a block to compile
 	getBlock(blockType, blockName){
-		if( ! this.blocks[blockType] ){
-			throw new Error(`blockType : ${blockType} Not registered`);
-		} 
-
-		if( !this.blocks[blockType][blockName] ){
-			throw new Error(`blockName : ${blockName} not registered in class ${blockType}`);
-		} 
-
-		return this.blocks[blockType][blockName];
+		return getBlockSpec(blockType, blockName);
 	}
 	
 	// Compiles a literal value

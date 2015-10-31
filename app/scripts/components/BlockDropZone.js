@@ -19,11 +19,14 @@ const blockTarget = {
 		let itemSpec = monitor.getItem().spec;
 		let {valuePropType} = props;
 
+		if( props.path === '$' ){
+			// debugger;
+		}
 		if( !_.contains(valuePropType.blockTypes, itemSpec.blockType) ){
 			return false;
 		}
 
-		if( !_.contains(valuePropType.blockTypes, 'VALUE')  &&  _.intersection(valuePropType.dataTypes, itemSpec.dataTypes).length === 0 ){
+		if( _.contains(valuePropType.blockTypes, 'VALUE')  &&  _.intersection(valuePropType.dataTypes, itemSpec.dataTypes).length === 0 ){
 			return false;
 		}
 
@@ -47,19 +50,13 @@ class BlockDropZone extends Component{
 		connectDropTarget: PropTypes.func.isRequired,
 		canDrop: PropTypes.bool.isRequired,
 		isOver: PropTypes.bool.isRequired,
-		acceptScriptBlock: PropTypes.bool,
 		path: PropTypes.string.isRequired,
-		acceptValue: PropTypes.bool,
-		acceptAll: PropTypes.bool,
 	}
 
 	render(){
 		const {connectDropTarget, isOver, canDrop} = this.props;
 		let className = classNames('block-drop-zone',{
-			'block-drop-zone--script': this.props.acceptScriptBlock,
 			'block-drop-zone--can-drop-here': isOver && canDrop,
-			'block-drop-zone--value': this.props.acceptValue,
-			'block-drop-zone--all': this.props.acceptAll,
 		}, this.props.className);
 
 		return  connectDropTarget(<div className={className}>
