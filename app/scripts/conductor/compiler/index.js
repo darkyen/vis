@@ -99,15 +99,15 @@ class Compiler{
 		}
 
 		let compiledProps = _.reduce(propTypes, (newProps, propType, propName) => {
+			console.log(props[propName]);
 			newProps[propName] = this.compileNode( props[propName], parentScope );
 			return newProps;
 		} ,{});
 
 		definition = definition(compiledProps, parentScope);
 		let buffer = definition, key, value;
-
 		for(let propName in compiledProps ){
-			key   = '$' + key;
+			key   = '$' + propName;
 			value = compiledProps[propName];
 			buffer = buffer.replace(key, value);
 		}

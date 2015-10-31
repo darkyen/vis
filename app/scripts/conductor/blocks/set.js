@@ -4,12 +4,12 @@ import React from 'react';
 
 let blockDef =  (props, parentScope) => {
 	let {varName, varValue} = props; 
-	let dec = [varName, '=', varName, ';'];
+	let dec = '$varName = $varValue;'
 	if( !parentScope.exists(varName) ){
 		parentScope.declare(varName, varValue);
-		dec.unshift('let');
+		dec = 'let ' + dec;
 	}
-	return dec.join(' ');
+	return dec;
 };
 
 let blockMeta  = {

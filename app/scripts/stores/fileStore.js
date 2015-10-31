@@ -21,11 +21,16 @@ class FileStore extends Store{
 
 	}
 
-	onBlockUpdated({meta, path}){
-		let node = this.getNodeAtPath(path);
-		_.assign(node.meta, meta);
+	onIdentifierUpdated({value, path}){
+		this.file.updateIdentifierAtPath(value, path);
 		this.__emitChange();
 	}
+	
+	onLiteralUpdated({value, path}){
+		this.file.updateLiteralAtPath(value, path);
+		this.__emitChange();
+	}
+
 	__onDispatch(action){
 			/* do nothing */
 		console.log('dispatcher heared', action);
@@ -33,16 +38,23 @@ class FileStore extends Store{
 		switch(type){
 			case 'block-created': 
 				this.onBlockCreated(payload);
-				break;
+			break;
+
 			case 'block-moved': 
 				this.onBlockMoved(payload);
-				break;
-			case 'block-updated':
-				this.onBlockUpdated(payload);
-				break;
+			break;
+
+			case 'identifier-updated':
+				this.onIdentifierUpdated(payload);
+			break;
+
+			case 'literal-updated':
+				this.onLiteralUpdated(payload);
+			break;
+
 			default:
 				throw new Error('Unsupported event');
-				break;
+			break;
 		}
 	}
 

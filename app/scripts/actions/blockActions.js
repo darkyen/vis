@@ -46,23 +46,17 @@ let blockActions = {
 	
 	},
 
-	// Called when you update something inside 
-	// a block.
-	updateBlockMeta(meta, path){
-		console.log(meta, path);
-		let type	= 'block-updated';
-		let payload = {meta, path};
-		dispatcher.dispatch({type, payload});
-	},
-
 	updateIdentifier(value, path){
-		let type    = '';
+		let type    = 'identifier-updated';
 		let payload = {value, path};
+		console.log(payload);
 		dispatcher.dispatch({type, payload});
 	},
 
 	updateLiteral(value, path){
-
+		let type = 'literal-updated';
+		let payload = {value, path};
+		dispatcher.dispatch({type, payload});
 	}
 
 };

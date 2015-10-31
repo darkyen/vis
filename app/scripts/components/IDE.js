@@ -7,7 +7,7 @@ import CodeEditor from './CodeEditor';
 import CodeRunner from './CodeRunner';
 import fileStore from '../stores/fileStore';
 import NodeComponent from './nodes/NodeComponent';
-import {blocks, builder} from '../conductor';
+import {compiler, blocks, builder} from '../conductor';
 
 class IDE extends Component{
 
@@ -23,12 +23,17 @@ class IDE extends Component{
 			return <NodeComponent node={node} isDummy={true}/>
 		});
 	}
+	
+	compileAndRun(){
+		console.log(this.props.file.code);
+		console.log(compiler.compile(this.props.file.code));
+	}
 
 	render(){
 		return 	<MDL.Layout className="mdl-layout--no-drawer-button" fixedHeader={true}>
 					<MDL.Header seamed={true} title={this.props.file.name} style={{color: 'white'}}>
                         <MDL.Navigation>
-                            <a href="">Run</a>
+                            <button onClick={ e => this.compileAndRun() } >Run</button>
                         </MDL.Navigation>
                     </MDL.Header>
                     <MDL.Content className="ide">

@@ -19,9 +19,6 @@ const blockTarget = {
 		let itemSpec = monitor.getItem().spec;
 		let {valuePropType} = props;
 
-		if( props.path === '$' ){
-			// debugger;
-		}
 		if( !_.contains(valuePropType.blockTypes, itemSpec.blockType) ){
 			return false;
 		}

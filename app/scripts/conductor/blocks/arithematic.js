@@ -16,7 +16,7 @@ let arithBlocks = basicOperations.map(function(spec){
 
 	if( spec.operands !== 1 ){
 
-		arithBlockDefStr = `( $operand1 ${ spec.operator }  $operand2 )`;
+		arithBlockDefStr = `($operand1 ${spec.operator} $operand2)`;
 		arithBlockStruct =  (props) => {
 			let {operand1, operand2} = props;
 			return  <div className="arith-block flex flex--horizontal flex--items-center">

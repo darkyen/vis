@@ -28,11 +28,12 @@ class File{
 		let node = this.code;
 
 		while(parts.length && node){
+			console.log(node);
 			let part = parts.shift();
 			switch(node.nodeType){
-				case NODE_TYPES.FLOW: 
+				case NODE_TYPES.LIST: 
 				case NODE_TYPES.BLOCK:
-					node = node.getProp(part)
+					node = node.getPath(part)
 				break;
 				default:
 					throw new Error('Only List and Block Nodes can have children');
@@ -51,6 +52,19 @@ class File{
 		let insertionPropName = parts.pop();
 		let parentNode   = this.getNodeAtPath(parts);
 		parentNode.mountProp(insertionPropName, node);
+	}
+
+	updateIdentifierAtPath(value, path){
+		let parts = path.split('.');
+		let identifier   = this.getNodeAtPath(parts);
+		identifier.updateIdentifier(value);
+
+	}
+
+	updateLiteralAtPath(value, path){
+		let parts = path.split('.');
+		let literal = this.getNodeAtPath(parts);
+		literal.setValue(value);
 	}
 
 	__create(){

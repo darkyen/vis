@@ -9,7 +9,7 @@ export default class Literal extends Node{
 
 	__serialize(){
 		return {
-			identifierName: this.getValue() 
+			value: this.getValue() 
 		};
 	}
 
@@ -23,9 +23,6 @@ export default class Literal extends Node{
 			return +this.value;
 		}
 		
-		if( typeof this.value  === 'string' ){
-			return `"${this.value}"`;
-		}
 		// Most likely an object -- better to return :P
 		return this.value;
 	}
