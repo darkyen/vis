@@ -1,5 +1,6 @@
 import Node from './Node';
 import {NODE_TYPES} from '../core';
+import {namedTypes, builders} from 'ast-types';
 
 export default class Literal extends Node{
 	constructor(value){
@@ -11,6 +12,10 @@ export default class Literal extends Node{
 		return {
 			value: this.getValue() 
 		};
+	}
+
+	__compile(){
+		return builders.literal(this.getValue());
 	}
 
 	setValue(value){

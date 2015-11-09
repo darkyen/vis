@@ -1,14 +1,22 @@
-import {BLOCK_TYPES, EXEC_TYPES} from '../core';
+import {NODE_TYPES, BLOCK_TYPES, EXEC_TYPES} from '../core';
 import def from '../def';
 import React from 'react';
+import {namedTypes, builders} from 'ast-types';
+
+
 let blockMeta  = {
-	condition: BLOCK_TYPES.VALUE,
-	body: BLOCK_TYPES.FLOW
+	condition: {
+		nodeTypes : [NODE_TYPES.BLOCK, NODE_TYPES.VOID], 
+		blockTypes: [BLOCK_TYPES.VALUE]
+	},
+	body: {
+		nodeTypes: [NODE_TYPES.LIST],
+	}
 };
 
 
-let whileBlockDef =  function(blockMetaValues){
-	return 'while( $condition ){\n$body\n}';
+let whileBlockDef =  function(props, compiledProps){
+	return builders.ifStatement(compiledProps.condition, builders.blockStatement(compiledProps.body));
 }
 
 let whileBlockStruct = (props) => {

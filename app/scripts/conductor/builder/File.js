@@ -3,6 +3,8 @@ import List from './List';
 import Block from './Block';
 import {NODE_TYPES, BLOCK_TYPES} from '../core';
 import getBlockSpec from '../utils/getBlockSpec';
+import createScope from '../utils/createScope';
+import {builders, namedTypes} from 'ast-types';
 
 class File{
 	constructor(fileString){
@@ -94,6 +96,19 @@ class File{
 		let {codeVersion, code, dependencies, name} = this;
 		code = code.serialize();
 		return {codeVersion, code, dependencies, name};
+	}
+
+	fromObject(){
+
+	}
+	
+	toString(){
+
+	}
+
+	getAST(){
+		let scope = createScope();
+		return builders.program(this.code.compile(scope));
 	}
 
 	toJSON(){

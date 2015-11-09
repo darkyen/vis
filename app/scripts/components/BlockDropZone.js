@@ -1,13 +1,13 @@
-import React, {Component, PropTypes} from 'react'; 
+import React, {Component, PropTypes} from 'react';
 import {DropTarget} from 'react-dnd';
 import ItemTypes from '../constants/ItemTypes';
 import classNames from 'classnames';
-import blockActions from '../actions/blockActions'; 
+import blockActions from '../actions/blockActions';
 import _ from 'lodash';
 
 const blockTarget = {
 	drop(props, monitor){
-		// dropped on a chaild
+		// dropped on a child
 		if( monitor.didDrop() ){
 			return;
 		}
@@ -15,9 +15,10 @@ const blockTarget = {
 	},
 
 	canDrop(props, monitor){
-		
+
 		let itemSpec = monitor.getItem().spec;
 		let {valuePropType} = props;
+		// console.log(props.path, valuePropType,itemSpec);
 
 		if( !_.contains(valuePropType.blockTypes, itemSpec.blockType) ){
 			return false;

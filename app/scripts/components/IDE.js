@@ -8,9 +8,8 @@ import CodeRunner from './CodeRunner';
 import fileStore from '../stores/fileStore';
 import NodeComponent from './nodes/NodeComponent';
 import {compiler, blocks, builder} from '../conductor';
-
+import {compileAndRun} from '../actions/ideActions';
 class IDE extends Component{
-
 	constructor(props){
 		super(props);
 		this.__creatorBlocks = blocks.map((def)=>{
@@ -25,8 +24,7 @@ class IDE extends Component{
 	}
 	
 	compileAndRun(){
-		console.log(this.props.file.code);
-		console.log(compiler.compile(this.props.file.code));
+		compileAndRun();
 	}
 
 	render(){
@@ -37,13 +35,11 @@ class IDE extends Component{
                         </MDL.Navigation>
                     </MDL.Header>
                     <MDL.Content className="ide">
-                    	<SideBar>
-                    		{this.renderAvailableScriptBlocks()}
-                    	</SideBar>
+                    	<SideBar>{this.renderAvailableScriptBlocks()}</SideBar>
                     	<CodeEditor file={this.props.file}></CodeEditor>
                     	<CodeRunner></CodeRunner>
                     </MDL.Content>
-				</MDL.Layout>;	
+				</MDL.Layout>;
 	}
 }
 

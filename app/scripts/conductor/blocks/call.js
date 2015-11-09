@@ -1,9 +1,14 @@
 import {NODE_TYPES, BLOCK_TYPES, DATA_TYPES, EXEC_TYPES} from '../core';
 import def from '../def';
 import React from 'react';
+import {namedTypes, builders} from 'ast-types';
 
-let blockDef =  (blockMetaValues, parentScope) => {
-	return 'if( $condition ){\n$body\n}';
+let blockDef =  (props, compiledProps, parentScope) => {
+	let {fnName, fnValues} = compiledProps;
+
+	return builders.expressionStatement(
+		builders.callExpression(fnName, fnValues)
+	);
 };
 
 let propTypes  = {
@@ -13,8 +18,9 @@ let propTypes  = {
 	},
 
 	fnArgsValue: {
-		nodeTypes: [NODE_TYPES.LIST]
 		blockType: [BLOCK_TYPES.VALUE],
+		nodeTypes: [NODE_TYPES.LIST],
+		joinBy: ', '
 	}
 };
 

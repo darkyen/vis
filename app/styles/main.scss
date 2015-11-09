@@ -152,10 +152,14 @@ body {
 .list{
   border: 1px solid #000;
   background: #fff;
+  flex: 1;
+  display: inline-flex;
+  flex-direction: column;
 }
 
 .block__part{
   margin: 5px;
+  display: flex;
 }
 
 .block__part + .block__part{
@@ -169,4 +173,9 @@ body {
 .block-drop-zone{
   flex: 1;
   display: inline-flex;
+  flex-direction: inherit;
+}
+
+.if-block__body{
+  min-height: 200px;
 }

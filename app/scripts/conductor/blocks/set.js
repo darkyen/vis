@@ -1,15 +1,30 @@
 import {BLOCK_TYPES, NODE_TYPES, DATA_TYPES, EXEC_TYPES} from '../core';
 import def from '../def';
 import React from 'react';
+import {builders, namedTypes} from 'ast-types';
 
-let blockDef =  (props, parentScope) => {
-	let {varName, varValue} = props; 
-	let dec = '$varName = $varValue;'
-	if( !parentScope.exists(varName) ){
-		parentScope.declare(varName, varValue);
-		dec = 'let ' + dec;
+function createDeclarationStatement(varName, varValue){
+	return builders.variableDeclaration("let", 
+		[builders.variableDeclarator(varName, varValue)]
+	);
+}
+
+function createAssignmentStatement(varName, varValue){
+	return builders.expressionStatement(
+		[builders.assignmentExpression("=", varName, varValue)]
+	);
+}
+
+let blockDef =  (props, compiledProps, parentScope) => {
+	
+	let varNameStr = props.varName.getIdentiferName();
+
+	let {varName, varValue} = compiledProps;
+	if( !parentScope.exists(varNameStr) ){
+		parentScope.declare(varNameStr);
+		return createDeclarationStatement(varName, varValue);
 	}
-	return dec;
+	return createAssignmentStatement(varName, varValue);
 };
 
 let blockMeta  = {

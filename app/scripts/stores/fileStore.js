@@ -2,6 +2,7 @@ import _ from 'lodash';
 import {builder} from '../conductor';
 import blockDispatcher from '../dispatchers/Dispatcher';
 import {Store} from 'flux/utils';
+import escodegen from 'escodegen';
 
 let {File} = builder;
 
@@ -21,11 +22,15 @@ class FileStore extends Store{
 
 	}
 
+	onCompileRequested(){
+		console.log(escodegen.generate(this.file.getAST()));
+	}
+
 	onIdentifierUpdated({value, path}){
 		this.file.updateIdentifierAtPath(value, path);
 		this.__emitChange();
 	}
-	
+
 	onLiteralUpdated({value, path}){
 		this.file.updateLiteralAtPath(value, path);
 		this.__emitChange();
@@ -33,14 +38,14 @@ class FileStore extends Store{
 
 	__onDispatch(action){
 			/* do nothing */
-		console.log('dispatcher heared', action);
+		// console.log('dispatcher heared', action);
 		let {type, payload} = action;
 		switch(type){
-			case 'block-created': 
+			case 'block-created':
 				this.onBlockCreated(payload);
 			break;
 
-			case 'block-moved': 
+			case 'block-moved':
 				this.onBlockMoved(payload);
 			break;
 
@@ -50,6 +55,10 @@ class FileStore extends Store{
 
 			case 'literal-updated':
 				this.onLiteralUpdated(payload);
+			break;
+
+			case 'ide-compile':
+				this.onCompileRequested(payload);
 			break;
 
 			default:

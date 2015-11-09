@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import Node from './Node';
 import {NODE_TYPES, BLOCK_TYPES, DATA_TYPES} from '../core';
+import {namedTypes, builders} from 'ast-types';
 
 class List extends Node{
 	constructor(listSpec = {
@@ -9,7 +10,7 @@ class List extends Node{
 			blockTypes: [BLOCK_TYPES.FLOW, BLOCK_TYPES.DECLARATION]
 		}
 	}){
-		super(NODE_TYPES.LIST);
+		super(NODE_TYPES.LIST, listSpec);
 		// The props here are an array.
 		this.propType = listSpec.propType;
 		this.nodes = [];
@@ -43,21 +44,16 @@ class List extends Node{
 		
 		if( propValue.nodeType !== NODE_TYPES.BLOCK ){
 			// now lets do a quick check for block type
-			throw new Error('Cannot mount accepted node-type is block');
+			throw new Error('Cannot mount accepted node-type is not block');
 		}
 
-		if( !_.contains(propType.blockTypes, propValue.blockType) ){
+		if( !_.contains(propType.blockTypes, propValue.getBlockType()) ){
 			throw new Error('Cannot mount accepted block types does not match block type of mountee node');
 		}
 
 		// and now lets see if we have a dataType
-		if( propType.blockType === BLOCK_TYPES.VALUE && !!(_.intersection(propType.dataTypes, propValue.dataTypes).length) ){
+		if( propType.blockType === BLOCK_TYPES.VALUE && !!(_.intersection(propType.dataTypes, propValue.getDataTypes()).length) ){
 			throw new Error('Cannot mount becasue the accepted data-type does not include the dataTypes of this block');
-		}
-
-		// Rarely ever going to ever happen
-		if( propType.blockType === BLOCK_TYPES.FLOW ){
-			throw new Error('Cannot have 2 flow nodes inside each other');
 		}
 
 		let currentMountedProp = propValue[propIndex];
@@ -65,9 +61,16 @@ class List extends Node{
 
 		return currentMountedProp;
 	}
+	
+	__compile(parentScope){
+		return this.nodes.map( n => n.compile(parentScope) );
+	}
 
 	__serialize(){
 		return {
+			listSpec: {
+				propType: this.propType
+			},
 			nodes: this.nodes.map((node) => {
 				return node.serialize();
 			})

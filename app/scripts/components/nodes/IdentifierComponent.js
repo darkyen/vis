@@ -8,9 +8,9 @@ class IdentifierComponent extends React.Component{
 		let identifierNode = this.props.node; 
 
 		return  <input
-					className="field field--identifier"
             		onChange={e => updateIdentifier(e.target.value, path)}
             		value={identifierNode.identifierName}
+					className="field field--identifier"
             		label="Variable"
         		/>;
 	}

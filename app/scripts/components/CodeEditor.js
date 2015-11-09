@@ -18,6 +18,7 @@ class CodeEditor extends Component{
 	
 	render(){
 		let {file} = this.props;
+		console.log(file.code);
 		return 	<div className="code-editor">
 					<header className="code-editor__header">Code</header>
 					<BlockDropZone 

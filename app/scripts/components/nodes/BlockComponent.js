@@ -52,11 +52,11 @@ class BlockComponent extends Component{
 			let dropPath = joinPath(path, propName);
 
 			newPropValues[propName] = 	<BlockDropZone valuePropType={propType} path={dropPath}>
-										<NodeComponent 
-											node={propValueNode} 
-											path={dropPath} 
-										></NodeComponent>
-									</BlockDropZone>;
+											<NodeComponent 
+												node={propValueNode} 
+												path={dropPath} 
+											></NodeComponent>
+										</BlockDropZone>;
 			return newPropValues;
 		}, {});
 

@@ -2,10 +2,11 @@ import {NODE_TYPES, BLOCK_TYPES, DATA_TYPES} from '../core';
 import def from '../def';
 import basicOperations from '../basicOperations';
 import React from 'react';
+import {namedTypes, builders} from 'ast-types';
 
 let arithBlocks = basicOperations.map(function(spec){
 
-	let arithBlockDefStr, arithBlockStruct, blockMeta;
+	let arithBlockStruct, blockMeta, arithBlockDef;
 
 	let blockSpec = {
 		blockName  : spec.operatorName,
@@ -15,8 +16,12 @@ let arithBlocks = basicOperations.map(function(spec){
 
 
 	if( spec.operands !== 1 ){
+		
+		arithBlockDef = (props, compiledProps, parentScope) => {
+			let {operand1, operand2} = compiledProps;
+			return builders.binaryExpression(spec.operator, operand1, operand2);
+		}
 
-		arithBlockDefStr = `($operand1 ${spec.operator} $operand2)`;
 		arithBlockStruct =  (props) => {
 			let {operand1, operand2} = props;
 			return  <div className="arith-block flex flex--horizontal flex--items-center">
@@ -39,7 +44,14 @@ let arithBlocks = basicOperations.map(function(spec){
 			}
 		};
 	}else if(spec.operands === 1 ){
-		arithBlockDefStr =  `( ${spec.operator} + $operand )`;
+	
+		arithBlockDef = (props, compiledProps, parentScope) => {
+			
+			let {operand} = compiledProps;
+			return builders.unaryExpression(spec.operator, operand);
+
+		}
+
 		arithBlockStruct =  (props)=>{
 			let {operand} = props;
 			return  <div className="arith-block flex flex-horizontal flex--items-center">
@@ -56,10 +68,6 @@ let arithBlocks = basicOperations.map(function(spec){
 		};
 	}else{
 		throw new Error('Unknown number of operands');
-	}
-
-	let arithBlockDef = (blockMetaValues, parentScope) => {
-		return arithBlockDefStr;
 	}
 
 	return def(blockSpec, blockMeta, arithBlockDef, arithBlockStruct);

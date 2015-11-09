@@ -1,5 +1,6 @@
 import Node from './Node';
 import {NODE_TYPES} from '../core';
+import {namedTypes, builders} from 'ast-types';
 
 export default class Identifier extends Node{
 	constructor(value){
@@ -11,6 +12,10 @@ export default class Identifier extends Node{
 		return {
 			identifierName: this.getIdentiferName()
 		};
+	}
+	
+	__compile(){
+		return builders.identifier(this.getIdentiferName());
 	}
 
 	updateIdentifier(value){
