@@ -15,14 +15,14 @@ class CodeEditor extends Component{
 		super(props);
 	}
 	/* Renders a node */
-	
+
 	render(){
 		let {file} = this.props;
-		console.log(file.code);
+		// console.log(file.code);
 		return 	<div className="code-editor">
 					<header className="code-editor__header">Code</header>
-					<BlockDropZone 
-						className="code-editor__content" 
+					<BlockDropZone
+						className="code-editor__content"
 						valuePropType={topLevelPropTypes}
 						path={"$.0"}
 					>
@@ -31,7 +31,7 @@ class CodeEditor extends Component{
 
 					<footer className="code-editor__footer"></footer>
 				</div>
-			
+
 	}
 }
 

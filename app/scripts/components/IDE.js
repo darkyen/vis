@@ -22,7 +22,7 @@ class IDE extends Component{
 			return <NodeComponent node={node} isDummy={true}/>
 		});
 	}
-	
+
 	compileAndRun(){
 		compileAndRun();
 	}
@@ -46,10 +46,10 @@ class IDE extends Component{
 class IDEContainer extends Component{
 	static getStores(){
 		return [fileStore];
-	}	
+	}
 
 	static calculateState(prevState){
-		console.log("State ", prevState, fileStore.getState());
+		// console.log("State ", prevState, fileStore.getState());
 		return {
 			file: fileStore.getState()
 		};

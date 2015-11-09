@@ -16,7 +16,7 @@ class File{
 	}
 
 	getNodeAtPath(parts){
-		
+
 		if( typeof parts === 'string' ){
 			parts = parts.split('.');
 		}
@@ -24,16 +24,15 @@ class File{
 		if( parts[0] !== '$' ){
 			throw new Error('Only absolute paths supported so-far');
 		}
-		
+
 		// this still looks ugly
 		parts.shift();
 		let node = this.code;
 
 		while(parts.length && node){
-			console.log(node);
 			let part = parts.shift();
 			switch(node.nodeType){
-				case NODE_TYPES.LIST: 
+				case NODE_TYPES.LIST:
 				case NODE_TYPES.BLOCK:
 					node = node.getPath(part)
 				break;
@@ -45,7 +44,7 @@ class File{
 
 		return node;
 	}
-	
+
 	insertBlockAtPath({blockType, blockName}, path){
 		let spec  = getBlockSpec(blockType, blockName);
 		let node  = new Block(spec);
@@ -84,7 +83,7 @@ class File{
 			dependencies: {}
 		});
 	}
-	
+
 	__load({codeVersion, code, dependencies, name}){
 		this.dependencies = dependencies;
 		this.codeVersion  = codeVersion;
@@ -101,7 +100,7 @@ class File{
 	fromObject(){
 
 	}
-	
+
 	toString(){
 
 	}

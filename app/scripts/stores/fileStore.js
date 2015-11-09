@@ -69,8 +69,8 @@ class FileStore extends Store{
 
 	getState(){
 		let state = this.file.toObject();
-		localStorage.currentFile = JSON.stringify(state);
-		console.log(state);
+		// localStorage.currentFile = JSON.stringify(state);
+		// console.log(state);
 		return state;
 	}
 }

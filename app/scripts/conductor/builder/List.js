@@ -15,7 +15,7 @@ class List extends Node{
 		this.propType = listSpec.propType;
 		this.nodes = [];
 	}
-	
+
 	getPath(path){
 		return this.nodes[path];
 	}
@@ -25,7 +25,7 @@ class List extends Node{
 		if( propIndex < 0 ){
 			propIndex = 0;
 		}
-		
+
 		if( propIndex > this.nodes.length ){
 			propIndex = this.nodes.length;
 		}
@@ -36,12 +36,12 @@ class List extends Node{
 		}
 
 		let {propType} = this;
-		console.log(propType, propValue);
+		// console.log(propType, propValue);
 
 		if( !_.contains(propType.nodeTypes, propValue.nodeType) ){
 			throw new Error('Cannot mount accepted Node types does not match node-type of mountee node');
 		}
-		
+
 		if( propValue.nodeType !== NODE_TYPES.BLOCK ){
 			// now lets do a quick check for block type
 			throw new Error('Cannot mount accepted node-type is not block');
@@ -61,7 +61,7 @@ class List extends Node{
 
 		return currentMountedProp;
 	}
-	
+
 	__compile(parentScope){
 		return this.nodes.map( n => n.compile(parentScope) );
 	}
