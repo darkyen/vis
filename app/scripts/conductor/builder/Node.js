@@ -13,11 +13,15 @@ export default class Node{
 	}
 
 	__serialize(){
-		throw new Error('Every subclass must implement this');
+		throw new Error('Every subclass must implement __serialize');
 	}
 
 	__compile(){
-		throw new Error('Every subclass must implement this method');
+		throw new Error('Every subclass must implement __compile');
+	}
+
+	__deserialize(){
+		throw new Error('Every subclass must implement __deserialize');
 	}
 
 	serialize(){

@@ -1,7 +1,7 @@
 #Vis
-A Visual programming ide, which is language independent aim and foucs is to develop as close as to pure logic. 
+A Visual programming ide, which is language independent aim and foucs is to develop as close as to pure logic.
 
-Current Version : Dioptre
+Current Version : Dioptre (WIP)
 
 #Vis for JS
 Added features include importing swagger and cylon api's out of the box with npm modules for javascript.

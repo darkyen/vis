@@ -7,11 +7,14 @@ import createScope from '../utils/createScope';
 import {builders, namedTypes} from 'ast-types';
 import Identifier from './Identifier';
 import Literal from './Literal';
+import joinPath from '../utils/joinPath';
 
 class File{
 	constructor(fileString){
 		if( typeof fileString === 'string' ){
-			this.__load(JSON.parse(fileString));
+			let fileObject = JSON.parse(fileString);
+			this.__load(fileObject);
+			this.loadFromObject(fileObject.code, '$');
 		}else{
 			this.__create();
 		}
@@ -48,11 +51,22 @@ class File{
 	}
 
 	insertNodeAtPath(node, path){
+		// Insert at root ?
+		if( path === '$' ){
+			this.code = node;
+			return;
+		}
+
 		let parts = path.split('.');
 		// path to parent
 		let insertionPropName = parts.pop();
 		let parentNode   = this.getNodeAtPath(parts);
 		parentNode.mountProp(insertionPropName, node);
+	}
+
+	insertListAtPath(listSpec, path){
+		let node = new List(listSpec);
+		this.insertNodeAtPath(node, path);
 	}
 
 	insertBlockAtPath({blockType, blockName}, path){
@@ -72,6 +86,14 @@ class File{
 	}
 
 	__create(){
+		this.__load({
+			name: 'New File',
+			codeVersion: '0.0.1',
+			dependencies: {}
+		});
+	}
+
+	__load({codeVersion, code, dependencies, name}){
 		let _root = new List({
 			propType:{
 				nodeTypes:  [NODE_TYPES.BLOCK],
@@ -79,18 +101,9 @@ class File{
 			}
 		});
 
-		this.__load({
-			name: 'New File',
-			codeVersion: '0.0.1',
-			code: _root,
-			dependencies: {}
-		});
-	}
-
-	__load({codeVersion, code, dependencies, name}){
 		this.dependencies = dependencies;
 		this.codeVersion  = codeVersion;
-		this.code 		  = code;
+		this.code 		  = _root;
 		this.name 		  = name;
 	}
 
@@ -100,21 +113,51 @@ class File{
 		return {codeVersion, code, dependencies, name};
 	}
 
-	fromObject(){
+	/*
+	 * builds a file from object
+	 */
+
+	loadFromObject(node, path){
+		switch(node.nodeType){
+
+			case NODE_TYPES.IDENTIFIER:
+				this.updateIdentifierAtPath(node.name, path);
+			break;
+
+			case NODE_TYPES.LITERAL:
+				this.updateLiteralAtPath(node.value, path);
+			break;
+
+			case NODE_TYPES.BLOCK:
+				this.insertBlockAtPath(node.identifier, path);
+
+				// Ideally each class should handle rehydration
+				// but we will have to re hydrate values here.
+				_.forEach(node.props, (nodeValue, propName) => {
+						this.loadFromObject(nodeValue, joinPath(path, propName));
+				});
+			break;
+
+			case NODE_TYPES.LIST:
+				this.insertListAtPath(node.listSpec, path);
+
+				_.forEach(node.nodes, (nodeValue, propIndex) => {
+						this.loadFromObject(nodeValue, joinPath(path, propIndex));
+				});
+			break;
+
+			default:
+				throw new Error('Unknown block type');
+			break;
+		}
+
 
 	}
 
-	toString(){
-
-	}
 
 	getAST(){
 		let scope = createScope();
 		return builders.program(this.code.compile(scope));
-	}
-
-	toJSON(){
-		return JSON.stringify(this.toObject());
 	}
 }
 
