@@ -64,7 +64,7 @@ body {
   flex-direction: column;
   background: #121212;
   font-family: 'Source Code Pro', monospace ;
-  
+
   &__header{
     padding: 0px 5px;
     height: 24px;
@@ -141,8 +141,46 @@ body {
   background: #fff;
   min-height: 18px;
   margin: 0px 5px;
-  padding: 4px;
   flex: 1;
+
+  &--identifier{
+      background: #F9C668;
+  }
+
+  &--literal{
+      background: #fff;
+  }
+
+  &__input{
+      min-height: 18px;
+      background: transparent;
+      border: 0;
+      padding: 4px;
+  }
+}
+
+.parenthesis{
+    flex: 1;
+    &::before{
+        content: '(';
+    }
+    &::after{
+        content: ')';
+    }
+}
+
+.call-block{
+    &__arguments{
+        > .block-drop-zone{
+            align-self: stretch;
+        }
+    }
+}
+
+.if-block, .while-block{
+    &__body{
+        min-height: 100px;
+    }
 }
 
 .text{
@@ -174,8 +212,4 @@ body {
   flex: 1;
   display: inline-flex;
   flex-direction: inherit;
-}
-
-.if-block__body{
-  min-height: 200px;
 }

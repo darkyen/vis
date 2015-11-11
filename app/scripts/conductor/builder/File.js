@@ -5,6 +5,8 @@ import {NODE_TYPES, BLOCK_TYPES} from '../core';
 import getBlockSpec from '../utils/getBlockSpec';
 import createScope from '../utils/createScope';
 import {builders, namedTypes} from 'ast-types';
+import Identifier from './Identifier';
+import Literal from './Literal';
 
 class File{
 	constructor(fileString){
@@ -45,9 +47,7 @@ class File{
 		return node;
 	}
 
-	insertBlockAtPath({blockType, blockName}, path){
-		let spec  = getBlockSpec(blockType, blockName);
-		let node  = new Block(spec);
+	insertNodeAtPath(node, path){
 		let parts = path.split('.');
 		// path to parent
 		let insertionPropName = parts.pop();
@@ -55,17 +55,20 @@ class File{
 		parentNode.mountProp(insertionPropName, node);
 	}
 
-	updateIdentifierAtPath(value, path){
-		let parts = path.split('.');
-		let identifier   = this.getNodeAtPath(parts);
-		identifier.updateIdentifier(value);
+	insertBlockAtPath({blockType, blockName}, path){
+		let spec  = getBlockSpec(blockType, blockName);
+		let node  = new Block(spec);
+		this.insertNodeAtPath(node, path);
+	}
 
+	updateIdentifierAtPath(value, path){
+		let node = new Identifier(value);
+		this.insertNodeAtPath(node, path);
 	}
 
 	updateLiteralAtPath(value, path){
-		let parts = path.split('.');
-		let literal = this.getNodeAtPath(parts);
-		literal.setValue(value);
+		let node = new Literal(value);
+		this.insertNodeAtPath(node, path);
 	}
 
 	__create(){

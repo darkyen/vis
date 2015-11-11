@@ -4,10 +4,10 @@ import React from 'react';
 import {namedTypes, builders} from 'ast-types';
 
 let blockDef =  (props, compiledProps, parentScope) => {
-	let {fnName, fnValues} = compiledProps;
-
+	let {fnName, fnArgsValue} = compiledProps;
+	// console.log(compiledProps, fnArgsValue);
 	return builders.expressionStatement(
-		builders.callExpression(fnName, fnValues)
+		builders.callExpression(fnName, fnArgsValue)
 	);
 };
 
@@ -26,9 +26,10 @@ let propTypes  = {
 
 let blockStruct = (props) => {
 	let {fnName, fnArgsValue} = props;
-	return  <div className="call-block flex flex--horizontal">
-				<div className="field">{fnName}</div>
-				<div className="field field--with-parenthesis">{fnArgsValue}</div>
+	return  <div className="call-block flex flex--horizontal flex--items-center">
+				<div className="text">call</div>
+				{fnName}
+				<div className="call-block__arguments flex flex--horizontal flex--items-center parenthesis">{fnArgsValue}</div>
 			</div>;
 }
 
@@ -43,7 +44,7 @@ let spec = {
 	// This can be synchronous as well
 	// as asynchronous use the deep search to figure out
 	// which type is this going to be
-	execTypes   : [FLOW_TYPES.SYNC, FLOW_TYPES.ASYNC]
+	execTypes   : [EXEC_TYPES.SYNC, EXEC_TYPES.ASYNC]
 };
 
 let ifBlockSpec = def(spec, propTypes, blockDef, blockStruct);

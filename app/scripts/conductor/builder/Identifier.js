@@ -2,27 +2,33 @@ import Node from './Node';
 import {NODE_TYPES} from '../core';
 import {namedTypes, builders} from 'ast-types';
 
+/* Used to handle identifiers
+ * @class Identifier
+ */
+
 export default class Identifier extends Node{
-	constructor(value){
+	constructor(name, type){
 		super(NODE_TYPES.IDENTIFIER);
-		this.updateIdentifier(value);
+		this.__name = name;
+		this.__type = type;
 	}
-	
+
 	__serialize(){
 		return {
-			identifierName: this.getIdentiferName()
+			name: this.getIdentiferName(),
+			type: this.getIdentiferType(),
 		};
 	}
-	
+
 	__compile(){
 		return builders.identifier(this.getIdentiferName());
 	}
 
-	updateIdentifier(value){
-		this.identifierName = value;		
+	getIdentiferName(){
+		return this.__name;
 	}
 
-	getIdentiferName(){
-		return this.identifierName;
+	getIdentiferType(){
+		return this.__type;
 	}
-} 
+}

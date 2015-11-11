@@ -18,8 +18,8 @@ class IDE extends Component{
 	}
 
 	renderAvailableScriptBlocks(){
-		return this.__creatorBlocks.map((node) => {
-			return <NodeComponent node={node} isDummy={true}/>
+		return this.__creatorBlocks.map((node, index) => {
+			return <NodeComponent key={"blk" + index} node={node} isDummy={true}/>
 		});
 	}
 

@@ -3,6 +3,7 @@ import {builder} from '../conductor';
 import blockDispatcher from '../dispatchers/Dispatcher';
 import {Store} from 'flux/utils';
 import escodegen from 'escodegen';
+let babel = require('babel-core');
 
 let {File} = builder;
 
@@ -24,6 +25,8 @@ class FileStore extends Store{
 
 	onCompileRequested(){
 		console.log(escodegen.generate(this.file.getAST()));
+		console.log(babel);
+		console.log(babel.transformFromAST(this.file.getAST()));
 	}
 
 	onIdentifierUpdated({value, path}){

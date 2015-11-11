@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import { 
+import {
 	Locations,
-	Location, 
-	NotFound 
+	Location,
+	NotFound
 } from 'react-router-component';
-import HTML5Backend from 'react-dnd/modules/backends/HTML5';
+import HTML5Backend from 'react-dnd-html5-backend';
 import {DragDropContext} from 'react-dnd';
 import IDE from './IDE';
 
@@ -15,12 +15,12 @@ class App extends Component{
 	}
 	render(){
 		return  <div className="app">
-					<Locations 
-						hash={true} 
-					>	
+					<Locations
+						hash={true}
+					>
 						<Location path="/" handler={IDE}></Location>
 					</Locations>
-				</div>;	
+				</div>;
 	}
 }
 
