@@ -16,10 +16,11 @@ let arithBlocks = basicOperations.map(function(spec){
 
 
 	if( spec.operands !== 1 ){
-		
+
 		arithBlockDef = (props, compiledProps, parentScope) => {
 			let {operand1, operand2} = compiledProps;
-			return builders.binaryExpression(spec.operator, operand1, operand2);
+			let exprType = spec.exprType || 'binaryExpression';
+			return builders[exprType](spec.operator, operand1, operand2);
 		}
 
 		arithBlockStruct =  (props) => {
@@ -35,18 +36,18 @@ let arithBlocks = basicOperations.map(function(spec){
 			operand1: {
 				nodeTypes:  [NODE_TYPES.IDENTIFIER, NODE_TYPES.LITERAL, NODE_TYPES.BLOCK],
 				blockTypes: [BLOCK_TYPES.VALUE],
-				dataTypes:  [DATA_TYPES.NUMBER, DATA_TYPES.STRING, DATA_TYPES.BOOLEAN] 
+				dataTypes:  [DATA_TYPES.NUMBER, DATA_TYPES.STRING, DATA_TYPES.BOOLEAN]
 			},
 			operand2: {
 				nodeTypes:  [NODE_TYPES.IDENTIFIER, NODE_TYPES.LITERAL, NODE_TYPES.BLOCK],
 				blockTypes: [BLOCK_TYPES.VALUE],
-				dataTypes:  [DATA_TYPES.NUMBER, DATA_TYPES.STRING, DATA_TYPES.BOOLEAN] 
+				dataTypes:  [DATA_TYPES.NUMBER, DATA_TYPES.STRING, DATA_TYPES.BOOLEAN]
 			}
 		};
 	}else if(spec.operands === 1 ){
-	
+
 		arithBlockDef = (props, compiledProps, parentScope) => {
-			
+
 			let {operand} = compiledProps;
 			return builders.unaryExpression(spec.operator, operand);
 
@@ -63,7 +64,7 @@ let arithBlocks = basicOperations.map(function(spec){
 			operand: {
 				nodeTypes:  [NODE_TYPES.IDENTIFIER, NODE_TYPES.LITERAL, NODE_TYPES.BLOCK],
 				blockTypes: [BLOCK_TYPES.VALUE],
-				dataTypes:  [DATA_TYPES.NUMBER, DATA_TYPES.STRING, DATA_TYPES.BOOLEAN] 
+				dataTypes:  [DATA_TYPES.NUMBER, DATA_TYPES.STRING, DATA_TYPES.BOOLEAN]
 			}
 		};
 	}else{

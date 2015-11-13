@@ -6,7 +6,7 @@ export default [
 		operatorName: '$add',
 		operator: '+',
 		tooltip: 'add',
-		returns: [DATA_TYPES.NUMBER, DATA_TYPES.STRING]
+		returns: [DATA_TYPES.NUMBER, DATA_TYPES.STRING],
 	},{
 		message: '-',
 		operatorName: '$sub',
@@ -54,6 +54,7 @@ export default [
 		message: 'and',
 		operatorName: '$and',
 		operator: '&&',
+		exprType: 'logicalExpression',
 		tooltip: 'and',
 		returns: [DATA_TYPES.BOOLEAN]
 	},{
@@ -61,6 +62,7 @@ export default [
 		operatorName: '$or',
 		operator: '||',
 		tooltip: 'or',
+		exprType: 'logicalExpression', 
 		returns: [DATA_TYPES.BOOLEAN]
 	},{
 		message: '>',

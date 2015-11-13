@@ -20,6 +20,13 @@ class List extends Node{
 		return this.nodes[path];
 	}
 
+	unMountProp(propIndex){
+		if( !propIndex ){
+			throw new Error('Cannot unmount');
+		}
+		return this.nodes.splice(propIndex, 1);
+	}
+
 	mountProp(propIndex = this.nodes.length, propValue){
 		//
 		if( propIndex < 0 ){
@@ -57,7 +64,7 @@ class List extends Node{
 		}
 
 		let currentMountedProp = propValue[propIndex];
-		this.nodes[propIndex]  = propValue;
+		this.nodes.splice(propIndex, 0, propValue);
 
 		return currentMountedProp;
 	}

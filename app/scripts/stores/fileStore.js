@@ -23,8 +23,9 @@ class FileStore extends Store{
 		this.__emitChange();
 	}
 
-	onBlockMoved(){
-
+	onBlockMoved({removalPath, dropPath}){
+		this.file.moveNode(removalPath, dropPath);
+		this.__emitChange();
 	}
 
 	onCompileRequested(){

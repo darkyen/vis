@@ -55,7 +55,7 @@ export default class Block extends Node{
 	}
 
 	__serialize(){
-		
+
 		let serializedProps = _.reduce(this.props, (result, prop, propName) => {
 			result[propName] = prop.serialize();
 			return result;
@@ -69,15 +69,14 @@ export default class Block extends Node{
 	}
 
 	initializeDefaultProp(propType){
-		// If this supports both 
 		if( _.contains(propType.nodeTypes, NODE_TYPES.LITERAL) ){
 			return new Literal('');
 		}
 
 		if( _.contains(propType.nodeTypes, NODE_TYPES.IDENTIFIER) ){
-			return new Identifier('');			
+			return new Identifier('');
 		}
-		
+
 		if( _.contains(propType.nodeTypes, NODE_TYPES.LIST) ){
 			return new List();
 		}
@@ -89,26 +88,26 @@ export default class Block extends Node{
 		return null;
 	}
 
+	__initializeProp(propName){
+		let propTypes = this.blockData.propTypes;
+		let propType  = propTypes[propName];
+		let propValue = this.initializeDefaultProp(propType);
+		this.mountProp(propName, propValue);
+	}
 
+	// initialize all the props,
+	// with appropiate defaults
 	createProps(){
-
-		// initialize all the props,
-		// with appropiate defaults 
 		this.props = {};
 		let propTypes = this.blockData.propTypes;
 		let propNames = Object.keys(propTypes);
-		propNames.forEach((propName) => {
-			let propType  = propTypes[propName];
-			let propValue = this.initializeDefaultProp(propType);
-			// console.log(propName, propValue);
-			this.mountProp(propName, propValue);
-		});
+		propNames.forEach((propName) => this.__initializeProp(propName));
 	}
-	
+
 	getPath(path){
 		return this.props[path];
 	}
-	
+
 	getBlockType(){
 		return this.blockData.spec.blockType;
 	}
@@ -121,9 +120,14 @@ export default class Block extends Node{
 		return this.blockData.spec.execTypes;
 	}
 
+	// unmounting really mounts
+	unMountProp(propName){
+		this.__initializeProp(propName);
+	}
+
 	mountProp(propName, propValue){
 		let {propTypes} = this.blockData;
-		
+
 		if( !propTypes[propName] ){
 			throw new Error(`Cannot mount unknown prop ${propName}`);
 		}
@@ -138,7 +142,7 @@ export default class Block extends Node{
 		if( !_.contains(propType.nodeTypes, propValue.nodeType) ){
 			throw new Error('Cannot mount accepted Node types does not match node-type of mountee node');
 		}
-		
+
 		if( propValue.nodeType === NODE_TYPES.BLOCK ){
 			// now lets do a quick check for block type
 			if( !_.contains(propType.blockTypes, propValue.getBlockType()) ){
@@ -155,10 +159,9 @@ export default class Block extends Node{
 				throw new Error('Cannot mount because exec types are incompatible');
 			}
 		}
-		// finally just mount
+
 		let currentValue = this.props[propName];
 		this.props[propName] = propValue;
-		
 		return currentValue;
 	}
 

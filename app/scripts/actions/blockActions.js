@@ -33,7 +33,7 @@ let blockActions = {
 		if( item.isDummy !== true ){
 			type = 'block-moved';
 			payload = {
-				blockPath: item.path,
+				removalPath: item.path,
 				dropPath:  path
 			}
 		}else{

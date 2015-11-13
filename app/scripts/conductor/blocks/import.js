@@ -4,7 +4,10 @@ import React from 'react';
 import {namedTypes, builders} from 'ast-types';
 
 let ifBlockDef =  (props, compiledProps, parentScope) => {
-	return builders.ifStatement(compiledProps.condition, builders.blockStatement(compiledProps.body));
+	return builders.ifStatement(
+		compiledProps.condition,
+		builders.blockStatement(compiledProps.body)
+	);
 };
 
 let blockMeta  = {

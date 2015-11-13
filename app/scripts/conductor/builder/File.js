@@ -51,24 +51,37 @@ class File{
 		return node;
 	}
 
+	/*
+	 *
+	 */
 	insertNodeAtPath(node, path){
-		// Insert at root ?
 		if( path === '$' ){
 			this.code = node;
 			return;
 		}
-		console.log(path);
+
 		let parts = path.split('.');
-		// path to parent
 		let insertionPropName = parts.pop();
 		let parentNode   = this.getNodeAtPath(parts);
 		parentNode.mountProp(insertionPropName, node);
 	}
 
-	removeNodeAtPath(node, path){
+	removeNodeAtPath(path){
 		if( path === '$' ){
-			throw new Error('You cannot remove the rootc');
+			throw new Error('You cannot remove the root man!');
 		}
+
+		let parts = path.split('.');
+		let removalPropName = parts.pop();
+		let parentNode = this.getNodeAtPath(parts);
+		parentNode.unMountProp(removalPropName);
+	}
+
+	moveNode(initialPath, finalPath){
+		console.log(initialPath, finalPath);
+		let currentNode = this.getNodeAtPath(initialPath);
+		this.insertNodeAtPath(currentNode, finalPath);
+		this.removeNodeAtPath(initialPath);
 	}
 
 	insertListAtPath(listSpec, path){

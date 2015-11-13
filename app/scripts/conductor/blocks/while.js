@@ -16,8 +16,11 @@ let blockMeta  = {
 };
 
 
-let whileBlockDef =  function(props, compiledProps){
-	return builders.whileStatement(compiledProps.condition, builders.blockStatement(compiledProps.body));
+let whileBlockDef =  function(props, compiledProps, parentScope){
+	return builders.whileStatement(
+		compiledProps.condition,
+		builders.blockStatement(compiledProps.body)
+	);
 }
 
 let whileBlockStruct = (props) => {
