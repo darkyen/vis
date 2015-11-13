@@ -1,12 +1,13 @@
 import _ from 'lodash';
-import List from './List';
-import Block from './Block';
 import {NODE_TYPES, BLOCK_TYPES} from '../core';
 import getBlockSpec from '../utils/getBlockSpec';
 import createScope from '../utils/createScope';
 import {builders, namedTypes} from 'ast-types';
 import Identifier from './Identifier';
 import Literal from './Literal';
+import List from './List';
+import Block from './Block';
+import VoidValue from './VoidValue';
 import joinPath from '../utils/joinPath';
 
 class File{
@@ -56,12 +57,18 @@ class File{
 			this.code = node;
 			return;
 		}
-
+		console.log(path);
 		let parts = path.split('.');
 		// path to parent
 		let insertionPropName = parts.pop();
 		let parentNode   = this.getNodeAtPath(parts);
 		parentNode.mountProp(insertionPropName, node);
+	}
+
+	removeNodeAtPath(node, path){
+		if( path === '$' ){
+			throw new Error('You cannot remove the rootc');
+		}
 	}
 
 	insertListAtPath(listSpec, path){
@@ -72,6 +79,11 @@ class File{
 	insertBlockAtPath({blockType, blockName}, path){
 		let spec  = getBlockSpec(blockType, blockName);
 		let node  = new Block(spec);
+		this.insertNodeAtPath(node, path);
+	}
+
+	insertVoidAtPath(path){
+		let node = new VoidValue();
 		this.insertNodeAtPath(node, path);
 	}
 
@@ -130,9 +142,6 @@ class File{
 
 			case NODE_TYPES.BLOCK:
 				this.insertBlockAtPath(node.identifier, path);
-
-				// Ideally each class should handle rehydration
-				// but we will have to re hydrate values here.
 				_.forEach(node.props, (nodeValue, propName) => {
 						this.loadFromObject(nodeValue, joinPath(path, propName));
 				});
@@ -140,13 +149,17 @@ class File{
 
 			case NODE_TYPES.LIST:
 				this.insertListAtPath(node.listSpec, path);
-
 				_.forEach(node.nodes, (nodeValue, propIndex) => {
 						this.loadFromObject(nodeValue, joinPath(path, propIndex));
 				});
 			break;
 
+			case NODE_TYPES.VOID:
+				this.insertVoidAtPath(path);
+			break;
+
 			default:
+				console.log(node);
 				throw new Error('Unknown block type');
 			break;
 		}
