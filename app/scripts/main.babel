@@ -1,6 +1,0 @@
-import DOM from 'react-dom';
-import React from 'react';
-import 'react-mdl/extra/material';
-import App from './components/App';
-
-DOM.render(<App />, document.getElementById('foo'));
