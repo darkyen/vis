@@ -66,7 +66,7 @@ class Runner{
             code = babel.transform(code).code;
         }catch(e){
             setTimeout( t => this.__error({
-                message:"The compiled code cannot run in this state \n, you might have an identifier field without \n a name or such syntactical errors"
+                message:"The compiled code cannot run in this state ,\nyou might have an identifier field without \n a name or such syntactical errors"
             }), 100);
         }
 
