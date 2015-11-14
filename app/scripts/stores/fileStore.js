@@ -25,6 +25,15 @@ class FileStore extends Store{
 
 	}
 
+	handleOutput({output}){
+		this.output = output;
+		this.__emitChange();
+	}
+
+	handleError({error}){
+		this.output = error.message;
+		this.__emitChange();
+	}
 
 	onBlockCreated({blockType, blockName, dropPath}){
 		this.file.insertBlockAtPath({blockType, blockName}, dropPath);
@@ -38,7 +47,8 @@ class FileStore extends Store{
 
 	onCompileRequested(){
 		this.code = escodegen.generate(this.file.getAST());
-		this.output = this.runner.setCode(this.code);
+		this.runner.setCode(this.code);
+		this.output = 'Running code ...';
 		this.__emitChange();
 	}
 
@@ -59,29 +69,40 @@ class FileStore extends Store{
 		switch(type){
 			case 'block-created':
 				this.onBlockCreated(payload);
+				this.onCompileRequested(payload);
 			break;
 
 			case 'block-moved':
 				this.onBlockMoved(payload);
+				this.onCompileRequested(payload);
 			break;
 
 			case 'identifier-updated':
 				this.onIdentifierUpdated(payload);
+				this.onCompileRequested(payload);
 			break;
 
 			case 'literal-updated':
 				this.onLiteralUpdated(payload);
+				this.onCompileRequested(payload);
 			break;
 
 			case 'ide-compile':
 				this.onCompileRequested(payload);
 			break;
 
+			case 'code-output':
+				this.handleOutput(payload);
+			break;
+
+			case 'code-error':
+				this.handleError(payload);
+			break;
+
 			default:
 				throw new Error('Unsupported event');
 			break;
 		}
-		this.onCompileRequested(payload);
 	}
 
 	getState(){

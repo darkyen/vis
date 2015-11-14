@@ -2,6 +2,8 @@ import _ from 'lodash';
 import Promise from 'bluebird';
 import work from 'webworkify';
 import RunWorker from './worker';
+import {errorOccured, outputOccured} from '../../actions/ideActions';
+
 var babel = require('babel-core');
 
 class Runner{
@@ -13,18 +15,36 @@ class Runner{
         this.__worker.onerror = function(){
             console.error(arguments);
         }
+        this.__worker.onmessage = (ev) => this.__handleMessage(ev);
     }
 
-    __output(payload){
-        // this.events.emit('run.output', payload);
+    __handleMessage(ev){
+        clearTimeout(this.__timeout);
+
+        let e = JSON.parse(ev.data);
+        let {eventType, payload} = e;
+        switch (eventType){
+            case 'output':
+                this.__output(payload);
+            break;
+            case 'error':
+                this.__error(payload);
+            break;
+        }
+    }
+    __output({output}){
+        outputOccured(output);
     }
 
-    __error(payload){
-        // this.events.emit('run.error', payload);
+    __error({error}){
+        errorOccured(error);
     }
 
-    postMessage(data){
-        let strData = JSON.stringify(data);
+    postMessage(eventType, data){
+        let strData = JSON.stringify({
+            eventType: eventType,
+            payload: data
+        });
         this.__worker.postMessage(strData);
     }
 
@@ -42,12 +62,22 @@ class Runner{
         }
         output;`
 
-        code = babel.transform(code).code;
-        return eval(code);
-        // this.postMessage({
-        //     type: 'code-update',
-        //     code
-        // });
+        try{
+            code = babel.transform(code).code;
+        }catch(e){
+            setTimeout( t => this.__error({
+                message:"The compiled code cannot run in this state \n, you might have an identifier field without \n a name or such syntactical errors"
+            }), 100);
+        }
+
+        this.postMessage('set-code', {code});
+        this.__timeout = setTimeout(t => this.handleTimeout(t), 10000);
+    }
+
+    handleTimeout(){
+        this.__error({
+            message: 'Execution took more than 10 seconds, \n so it was timed out by the system... maybe you had a while loop that never finished ?'
+        })
     }
 
     run(runtimeOpts){

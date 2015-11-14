@@ -11,7 +11,7 @@ export default class VoidValue extends Node{
 		try{
 			throw new Error('some error');
 		}catch(e){
-			console.warn('You are trying to compile a void, void values are converted to null in js', e.stack);
+			//console.warn('You are trying to compile a void, void values are converted to null in js', e.stack);
 		}
 		return builders.literal(null);
 	}

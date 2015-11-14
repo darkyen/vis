@@ -7,5 +7,19 @@ export default {
 			type: 'ide-compile',
 			payload: {}
 		})
+	},
+
+	errorOccured(error){
+		dispatcher.dispatch({
+			type: 'code-error',
+			payload: {error}
+		});
+	},
+
+	outputOccured(output){
+		dispatcher.dispatch({
+			type: 'code-output',
+			payload: {output}
+		})
 	}
 };
