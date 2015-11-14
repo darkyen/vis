@@ -78,6 +78,7 @@ body {
     position: relative;
     overflow: auto;
     flex: 1;
+
   }
 
   &__footer{
@@ -96,6 +97,11 @@ body {
     height: 100%;
     width: 100%;
     border: 0;
+  }
+
+  &__code{
+      padding-left: 10px;
+      color: #fff;
   }
 }
 

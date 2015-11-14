@@ -3,6 +3,7 @@ import {builder} from '../conductor';
 import blockDispatcher from '../dispatchers/Dispatcher';
 import {Store} from 'flux/utils';
 import escodegen from 'escodegen';
+import Runner from '../conductor/runnable/runner';
 
 let {File} = builder;
 
@@ -14,7 +15,11 @@ class FileStore extends Store{
 			this.file = new File(localStorage.currentFile);
 			return;
 		}
+
 		this.file = new File();
+		this.runner = new Runner();
+		this.code = '';
+		this.output = '';
 	}
 
 
@@ -29,7 +34,8 @@ class FileStore extends Store{
 	}
 
 	onCompileRequested(){
-		console.log(escodegen.generate(this.file.getAST()));
+		this.code = escodegen.generate(this.file.getAST());
+		this.__emitChange();
 	}
 
 	onIdentifierUpdated({value, path}){
@@ -74,10 +80,12 @@ class FileStore extends Store{
 	}
 
 	getState(){
-		let state = this.file.toObject();
-		localStorage.currentFile = JSON.stringify(state);
-		// console.log(state);
-		return state;
+		let file = this.file.toObject();
+		localStorage.currentFile = JSON.stringify(file);
+		let output = this.output;
+		let code = this.code;
+		console.log(file, output, code);
+		return {file, output, code};
 	}
 }
 

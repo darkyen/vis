@@ -17,6 +17,8 @@ class NodeComponent extends React.Component{
 			return <div></div>;
 		}
 
+		// console.log(node);
+
 		switch(node.nodeType){
 
 			case NODE_TYPES.LIST:

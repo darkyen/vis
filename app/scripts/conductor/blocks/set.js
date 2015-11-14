@@ -4,19 +4,19 @@ import React from 'react';
 import {builders, namedTypes} from 'ast-types';
 
 function createDeclarationStatement(varName, varValue){
-	return builders.variableDeclaration("let", 
+	return builders.variableDeclaration("let",
 		[builders.variableDeclarator(varName, varValue)]
 	);
 }
 
 function createAssignmentStatement(varName, varValue){
 	return builders.expressionStatement(
-		[builders.assignmentExpression("=", varName, varValue)]
+		builders.assignmentExpression("=", varName, varValue)
 	);
 }
 
 let blockDef =  (props, compiledProps, parentScope) => {
-	
+
 	let varNameStr = props.varName.getIdentiferName();
 
 	let {varName, varValue} = compiledProps;
@@ -34,7 +34,7 @@ let blockMeta  = {
 	varValue: {
 		nodeTypes  :  [NODE_TYPES.IDENTIFIER, NODE_TYPES.LITERAL, NODE_TYPES.BLOCK],
 		blockTypes :  BLOCK_TYPES.ALL,
-		dataTypes  :  DATA_TYPES.ALL 
+		dataTypes  :  DATA_TYPES.ALL
 	},
 };
 
