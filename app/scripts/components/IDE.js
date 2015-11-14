@@ -16,6 +16,7 @@ class IDE extends Component{
 		this.__creatorBlocks = blocks.map((def) => {
 			return (new builder.Block(def)).serialize();
 		});
+		setTimeout(compileAndRun, 1000);
 	}
 
 	renderAvailableScriptBlocks(){
@@ -33,6 +34,9 @@ class IDE extends Component{
 	}
 
 	render(){
+		// <button
+		// 	onClick={e => this.compileAndRun()}
+		// >Run</button>
 		return 	<MDL.Layout
 					className="mdl-layout--no-drawer-button"
 					fixedHeader={true}
@@ -43,9 +47,6 @@ class IDE extends Component{
 						style={{color: 'white'}}
 					>
                         <MDL.Navigation>
-                            <button
-								onClick={e => this.compileAndRun()}
-							>Run</button>
                         </MDL.Navigation>
                     </MDL.Header>
                     <MDL.Content

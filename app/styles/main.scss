@@ -93,10 +93,12 @@ body {
 
 .code-runner{
   &__output{
+    padding-left: 10px;
     position: absolute;
     height: 100%;
     width: 100%;
     border: 0;
+    color: #fff;
   }
 
   &__code{

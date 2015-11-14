@@ -4,6 +4,7 @@ import arithBlocks from './arithematic';
 import setBlock from './set';
 import callBlock from './call';
 import importBlock from './import';
+import printBlock from './print';
 // with this new spec
 // the code for a program should be
 // the same as old
@@ -11,7 +12,8 @@ import importBlock from './import';
 let blocks =  [
 	ifBlock,
 	setBlock,
-	callBlock,
+	printBlock,
+	// callBlock,
 	whileBlock,
 	// importBlock,
 	... arithBlocks

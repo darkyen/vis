@@ -1,13 +1,12 @@
 import _ from 'lodash';
-import EventEmitter2 from 'eventemitter2';
 import Promise from 'bluebird';
 import work from 'webworkify';
 import RunWorker from './worker';
+var babel = require('babel-core');
 
 class Runner{
     constructor(opts){
         this.opts = opts;
-        this.events = new EventEmitter2();
         this.__code = '';
         this.__worker = work(RunWorker);
         console.log("worker up");
@@ -17,11 +16,11 @@ class Runner{
     }
 
     __output(payload){
-        this.events.emit('run.output', payload);
+        // this.events.emit('run.output', payload);
     }
 
     __error(payload){
-        this.events.emit('run.error', payload);
+        // this.events.emit('run.error', payload);
     }
 
     postMessage(data){
@@ -30,11 +29,25 @@ class Runner{
     }
 
     setCode(code){
-        console.log("Set code");
-        this.postMessage({
-            type: 'code-update',
-            code
-        });
+        console.log("This might hang the browser");
+        code = `
+        let output = [];
+        let console = {
+            log: (argument) => output.push(argument)
+        }
+        try{
+            ${code}
+        }catch(e){
+            console.log(e.message);
+        }
+        output;`
+
+        code = babel.transform(code).code;
+        return eval(code);
+        // this.postMessage({
+        //     type: 'code-update',
+        //     code
+        // });
     }
 
     run(runtimeOpts){

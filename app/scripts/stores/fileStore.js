@@ -11,15 +11,18 @@ class FileStore extends Store{
 
 	constructor(dispatcher){
 		super(dispatcher);
+
+		this.runner = new Runner();
+		this.code = '';
+		this.output = '';
+
 		if( localStorage.currentFile ){
 			this.file = new File(localStorage.currentFile);
 			return;
 		}
 
 		this.file = new File();
-		this.runner = new Runner();
-		this.code = '';
-		this.output = '';
+
 	}
 
 
@@ -35,6 +38,7 @@ class FileStore extends Store{
 
 	onCompileRequested(){
 		this.code = escodegen.generate(this.file.getAST());
+		this.output = this.runner.setCode(this.code);
 		this.__emitChange();
 	}
 
@@ -77,6 +81,7 @@ class FileStore extends Store{
 				throw new Error('Unsupported event');
 			break;
 		}
+		this.onCompileRequested(payload);
 	}
 
 	getState(){
@@ -84,7 +89,6 @@ class FileStore extends Store{
 		localStorage.currentFile = JSON.stringify(file);
 		let output = this.output;
 		let code = this.code;
-		console.log(file, output, code);
 		return {file, output, code};
 	}
 }
