@@ -26,13 +26,17 @@ let whileBlockDef =  function(props, compiledProps, parentScope){
 let whileBlockStruct = (props) => {
 	let {condition, body} = props;
 	return  <div className="while-block">
-				<div className="while-block__condition block__part flex flex--horizontal flex--items-center">
+				<div className="while-block__condition block__part block__part--horizontal-expansion">
 					<div className="text">while</div>
 					{condition}
 				</div>
-				<div className="while-block__body block__part">
-					{body}
+				<div className="while-block__body block__neck">
+					<div className="block__neck-jewellary"></div>
+					<div className="block__neck-children-container">
+						{body}
+					</div>
 				</div>
+				<div className="block__part" />
 			</div>;
 };
 

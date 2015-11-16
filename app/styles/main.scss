@@ -24,7 +24,7 @@ button, input {
 }
 
 body {
-  background: #f0f0f0;
+  background: #34495e;
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
   color: #333;
 }
@@ -33,11 +33,11 @@ body {
   display: flex;
   .sidebar{
     flex: 1;
-    background: #d8d8d8;
+    background: #2c3e50;
   }
   .code-editor{
     flex: 3;
-    background: #f0f0f0;
+    background: #2c3e50;
   }
   .code-runner{
     flex: 2;
@@ -63,7 +63,7 @@ body {
   display: flex;
   flex-direction: column;
   background: #121212;
-  font-family: 'Source Code Pro', monospace ;
+  font-family: 'Source Code Pro', monospace;
 
   &__header{
     padding: 0px 5px;
@@ -78,7 +78,6 @@ body {
     position: relative;
     overflow: auto;
     flex: 1;
-
   }
 
   &__footer{
@@ -91,10 +90,19 @@ body {
   }
 }
 
+.code-editor__content{
+    > .list > .block-drop-zone{
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        left: 0px;
+        top: 0px;
+    }
+}
 .code-runner{
   &__output{
-    padding-left: 10px;
     position: absolute;
+    padding-left: 10px;
     height: 100%;
     width: 100%;
     border: 0;
@@ -119,56 +127,138 @@ body {
 
 .flex{
   display: flex;
-  &--horizontal{
-    flex-direction: row;
-  }
-  &--items-center{
-    align-items: center;
-  }
 }
 
 .block{
-  padding: 5px;
-  background: #fff;
-  font-family: 'Source Code Pro', monospace ;
+  font-family: 'Source Code Pro', monospace;
+  display: inline-block;
+  position: relative;
   font-size: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
 
-  &--flow{
-    background: #dd0;
+  &__part{
+
+
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      position: relative;
+    //   display: inline-block;
+      padding: 2px 5px;
+
+      .block--decl &{
+         background: #3498db;
+      }
+
+      .block--flow &{
+         background: #f1c40f;
+      }
+
+      .block--value &{
+          background: #2ecc71;
+      }
+
+      &--horizontal-expansion{
+          white-space: nowrap;
+          > *{
+              vertical-align: middle;
+          }
+      }
+
+      &:empty{
+          height: 5px;
+      }
   }
 
-  &--value{
-    background: #9d8;
+  &__neck{
+      position: relative;
+      display: flex;
+  }
+
+  &__neck-jewellary{
+      border-left: 1px solid rgba(0, 0, 0, 0.2);
+      border-right: 1px solid rgba(0, 0, 0, 0.2);
+      margin: -1px 0px;
+      content: ' ';
+      width: 5px;
+      left: 0px;
+      z-index: 100;
+      .block--flow &{
+          background: #f1c40f;
+      }
+      .block--decl &{
+          background: #3498db;
+      }
+  }
+
+
+  &__neck-children-container{
+      flex: 1;
+      > .list > .block-drop-zone{
+          min-height: 60px;
+          width:100%;
+      }
   }
 
 }
 
+.block-drop-zone{
+    display: inline-block;
+    position: relative;
+}
+
 .field{
-  border: 1px solid #000;
-  background: #fff;
+    background: #ecf0f1;
+    min-height: 20px;
+    min-width: 20px;
+}
+
+.expandable-field{
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: #ecf0f1;
+  position: relative;
   min-height: 18px;
-  margin: 0px 5px;
-  flex: 1;
+  min-width: 20px;
 
   &--identifier{
-      background: #F9C668;
+      background: #e67e22;
   }
 
   &--literal{
       background: #fff;
   }
 
+  &__hidden-field,
   &__input{
-      min-height: 18px;
+      font-family: 'Source Code Pro', monospace ;
       background: transparent;
+      box-sizing: border-box;
+      white-space: nowrap;
+      word-wrap: normal;
+      min-height: 18px;
+      font-size: 14px;
+      padding: 2px 4px;
       border: 0;
-      padding: 4px;
+  }
+
+
+  &__hidden-field{
+      visibility: collapse;
+      padding-right: 20px;
+  }
+
+  &__hidden-field:empty::before{
+      color: transparent;
+      content: 'S';
+  }
+
+  &__input{
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      left: 0px;
+      top: 0px;
   }
 }
 
 .parenthesis{
-    flex: 1;
     &::before{
         content: '(';
     }
@@ -177,47 +267,23 @@ body {
     }
 }
 
-.call-block{
+.print-block, .def-block{
     &__arguments{
-        > .block-drop-zone{
-            align-self: stretch;
-        }
-    }
-}
-
-.if-block, .while-block{
-    &__body{
-        min-height: 100px;
+        display: inline-block;
     }
 }
 
 .text{
+  display: inline-block;
   margin: 0px 5px;
+  &:first-child{
+     margin-left: 0px;
+  }
 }
+
 
 .list{
-  border: 1px solid #000;
-  background: #fff;
-  flex: 1;
-  display: inline-flex;
-  flex-direction: column;
-}
-
-.block__part{
-  margin: 5px;
-  display: flex;
-}
-
-.block__part + .block__part{
-  margin-top: 5px;
-}
-
-.list:empty{
-  min-height: 80px;
-}
-
-.block-drop-zone{
-  flex: 1;
-  display: inline-flex;
-  flex-direction: inherit;
+  &:empty{
+      min-height: 80px;
+  }
 }

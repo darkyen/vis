@@ -25,10 +25,12 @@ let arithBlocks = basicOperations.map(function(spec){
 
 		arithBlockStruct =  (props) => {
 			let {operand1, operand2} = props;
-			return  <div className="arith-block flex flex--horizontal flex--items-center">
-						{operand1}
-						<div className="text">{spec.message}</div>
-						{operand2}
+			return  <div className="arith-block">
+						<div className="block__part block__part--horizontal-expansion">
+							{operand1}
+							<div className="text">{spec.message}</div>
+							{operand2}
+						</div>
 					</div>;
 		}
 
@@ -56,8 +58,10 @@ let arithBlocks = basicOperations.map(function(spec){
 		arithBlockStruct =  (props)=>{
 			let {operand} = props;
 			return  <div className="arith-block flex flex-horizontal flex--items-center">
-						<div className="text">{spec.message}</div>
-						{operand}
+						<div className="block__part block__part--horizontal-expansion">
+							<div className="text">{spec.message}</div>
+							{operand}
+						</div>
 					</div>
 		}
 		blockMeta  = {

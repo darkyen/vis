@@ -36,9 +36,11 @@ let propTypes  = {
 
 let blockStruct = (props) => {
 	let {fnName, fnArgsValue} = props;
-	return  <div className="call-block flex flex--horizontal flex--items-center">
-				<div className="text">print</div>
-				<div className="call-block__arguments flex flex--horizontal flex--items-center parenthesis">{fnArgsValue}</div>
+	return  <div className="print-block">
+				<div className="block__part block__part--horizontal-expansion">
+					<div className="text">print</div>
+					<div className="print-block__arguments parenthesis">{fnArgsValue}</div>
+				</div>
 			</div>;
 }
 

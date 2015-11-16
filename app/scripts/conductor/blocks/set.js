@@ -40,11 +40,13 @@ let blockMeta  = {
 
 let blockStruct = (props) => {
 	let {varName, varValue} = props;
-	return  <div className="set-block flex flex--horizontal flex--items-center">
-				<div className="text">set</div>
-				{varName}
-				<div className="text">to</div>
-				{varValue}
+	return  <div className="set-block">
+				<div className="block__part block__part--horizontal-expansion">
+					<div className="text">set</div>
+					{varName}
+					<div className="text">to</div>
+					{varValue}
+				</div>
 			</div>
 }
 

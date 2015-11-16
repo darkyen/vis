@@ -7,7 +7,7 @@ export default class ListComponent extends React.Component{
 	render(){
 		let {path, node} = this.props;
 		let {propType} = node.listSpec;
-		
+
 		return  <div className="list">
 					<BlockDropZone
 						valuePropType={propType}
@@ -15,11 +15,12 @@ export default class ListComponent extends React.Component{
 					>
 						{node.nodes.map((node, index) => {
 							let currPath = joinPath(path, index);
-							return <NodeComponent
-										key={currPath}
-										path={currPath}
-										node={node}
-									/>
+							return  <div>
+										<NodeComponent
+											path={currPath}
+											node={node}
+										/>
+									</div>;
 						})}
 					</BlockDropZone>
 				</div>

@@ -21,11 +21,13 @@ class IDE extends Component{
 
 	renderAvailableScriptBlocks(){
 		return this.__creatorBlocks.map((node, index) => {
-			return <NodeComponent
-				key={"blk" + index}
-				node={node}
-				isDummy={true}
-			/>;
+			return  <div>
+						<NodeComponent
+							key={"blk" + index}
+							node={node}
+							isDummy={true}
+						/>
+					</div>;
 		});
 	}
 
@@ -35,7 +37,7 @@ class IDE extends Component{
 
 	render(){
 		// <button
-		// 	onClick={e => this.compileAndRun()}
+		//
 		// >Run</button>
 		return 	<MDL.Layout
 					className="mdl-layout--no-drawer-button"
@@ -46,8 +48,10 @@ class IDE extends Component{
 						title={this.props.file.name}
 						style={{color: 'white'}}
 					>
-                        <MDL.Navigation>
-                        </MDL.Navigation>
+						<MDL.Button
+							accent={true}
+							onClick={e => this.compileAndRun()}
+						>Run</MDL.Button>
                     </MDL.Header>
                     <MDL.Content
 						className="ide"

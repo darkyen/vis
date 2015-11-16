@@ -69,22 +69,18 @@ class FileStore extends Store{
 		switch(type){
 			case 'block-created':
 				this.onBlockCreated(payload);
-				this.onCompileRequested(payload);
 			break;
 
 			case 'block-moved':
 				this.onBlockMoved(payload);
-				this.onCompileRequested(payload);
 			break;
 
 			case 'identifier-updated':
 				this.onIdentifierUpdated(payload);
-				this.onCompileRequested(payload);
 			break;
 
 			case 'literal-updated':
 				this.onLiteralUpdated(payload);
-				this.onCompileRequested(payload);
 			break;
 
 			case 'ide-compile':

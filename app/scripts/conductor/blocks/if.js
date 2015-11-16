@@ -24,13 +24,17 @@ let blockMeta  = {
 let ifBlockStruct = function(props){
 	let {condition, body} = props;
 	return  <div className="if-block">
-				<div className="if-block__condition block__part flex flex--horizontal flex--items-center">
+				<div className="if-block__condition block__part block__part--horizontal-expansion">
 					<div className="text">if</div>
 					{condition}
 				</div>
-				<div className="if-block__body block__part">
-					{body}
+				<div className="if-block__body block__neck">
+					<div className="block__neck-jewellary"></div>
+					<div className="block__neck-children-container">
+						{body}
+					</div>
 				</div>
+				<div className="block__part"></div>
 			</div>;
 }
 

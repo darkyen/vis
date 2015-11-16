@@ -6,10 +6,14 @@ class Scope{
 		this.values = {};
 		// the 4 spaces thing
 		// makes code much more readable
-		// :P 
+		// :P
 		if( parentScope instanceof Scope ){
 			_.assign(this.values, parentScope.values);
 		}
+	}
+
+	serialize(){
+		return _.assign({}, this.values);
 	}
 
 	exists(varName){

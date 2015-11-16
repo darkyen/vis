@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import classNames from 'classnames';
 import _ from 'lodash';
-import {BLOCK_TYPES} from '../../conductor/core';
+import {BLOCK_TYPES, NODE_TYPES} from '../../conductor/core';
 import joinPath from '../../conductor/utils/joinPath'
 import NodeComponent from './NodeComponent';
 import BlockDropZone from '../BlockDropZone';
@@ -46,17 +46,23 @@ class BlockComponent extends Component{
 			'block--value' : blockType === BLOCK_TYPES.VALUE,
 			'block--flow'  : blockType === BLOCK_TYPES.FLOW,
 		});
-		
+
 		let blockPropValues = _.reduce(blockProps, (newPropValues, propValueNode, propName) => {
 			let propType = propTypes[propName];
 			let dropPath = joinPath(path, propName);
-
-			newPropValues[propName] = 	<BlockDropZone valuePropType={propType} path={dropPath}>
-											<NodeComponent 
-												node={propValueNode} 
-												path={dropPath} 
-											></NodeComponent>
-										</BlockDropZone>;
+			if( propValueNode.nodeType !== NODE_TYPES.LIST ){
+				newPropValues[propName] = 	<BlockDropZone valuePropType={propType} path={dropPath}>
+												<NodeComponent
+													node={propValueNode}
+													path={dropPath}
+												></NodeComponent>
+											</BlockDropZone>;
+			}else{
+				newPropValues[propName] = <NodeComponent
+											node={propValueNode}
+											path={dropPath}
+										  />;
+			}
 			return newPropValues;
 		}, {});
 

@@ -8,8 +8,8 @@ export default class Node{
 		if(!NODE_TYPES[type]){
 			throw new Error(`Unknown node type ${type}`);
 		}
-		this.nodeType = type;
 		this.createsChildScope = nodeSpec.createsChildScope || false;
+		this.nodeType = type;
 	}
 
 	__serialize(){
@@ -24,21 +24,22 @@ export default class Node{
 		throw new Error('Every subclass must implement __deserialize');
 	}
 
-	serialize(){
-		// actual serialize function
-		return _.assign(this.__serialize(), {
+	// actual serialize function
+	// uses the node to serialize the data,
+	// and adds the variables in scope to it.
+	serialize(parentScope = createScope()){
+		if( this.createsChildScope === true ){
+			parentScope = createScope(parentScope);
+		}
+		return _.assign(this.__serialize(parentScope), {
 			nodeType: this.nodeType,
 		});
 	}
 
 	compile(parentScope){
-
-		// create child scope here
 		if( this.createsChildScope === true ){
 			parentScope = createScope(parentScope);
 		}
-
-		// this.measurements = measureString(buffer);
 		return this.__compile(parentScope);
 	}
 }
