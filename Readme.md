@@ -1,5 +1,5 @@
 #Vis
-![image](https://cloud.githubusercontent.com/assets/1041315/11164903/ff179c96-8ab2-11e5-9b4d-62066b8364bf.png)
+![image](http://i.imgur.com/37fgaUe.png)
 
 A Visual programming ide, which is language independent aim and foucs is to develop as close as to pure logic.
 
