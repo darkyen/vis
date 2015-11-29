@@ -1,8 +1,6 @@
-import Block from './Block';
-import Identifier from './Identifier';
-import Literal from './Literal';
-import Node from './Node';
-import List from './List';
-import File from './File';
+import BaseNode from './BaseNode';
+import Child from './Child';
+import ChildArray from './ChildArray';
+import def from './def';
 
-export default {Block, Identifier, Literal, Node, List, File};
+export default {Child, BaseNode, ChildArray, def};

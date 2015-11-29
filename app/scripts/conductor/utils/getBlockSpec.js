@@ -1,6 +1,6 @@
 import blocks from '../blocks';
 
-let blockSpecMap = blocks.reduce( (blockMap, blockSpec) => {
+let blockSpecMap = [].reduce( (blockMap, blockSpec) => {
 	let {blockType, blockName} = blockSpec.spec;
 	blockMap[blockType] = blockMap[blockType] || {};
 	blockMap[blockType][blockName] = blockSpec;
@@ -9,11 +9,11 @@ let blockSpecMap = blocks.reduce( (blockMap, blockSpec) => {
 
 let getBlockSpec = (blockType, blockName) =>{
 	if( !blockSpecMap[blockType] ){
-		throw new Error(`blockType ${blockType}is not in the dictionary`); 
+		throw new Error(`blockType ${blockType}is not in the dictionary`);
 	}
 
 	if( !blockSpecMap[blockType][blockName] ){
-		throw new Error(`blockType ${blockType} does not contain ${blockName}`); 
+		throw new Error(`blockType ${blockType} does not contain ${blockName}`);
 	}
 
 	return blockSpecMap[blockType][blockName];

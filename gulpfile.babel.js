@@ -12,6 +12,8 @@ import ghPages from 'gulp-gh-pages';
 import buffer from 'vinyl-buffer';
 import gutil from 'gulp-util';
 import chalk from 'chalk';
+import _ from 'lodash';
+import bBuiltins from 'browserify/lib/builtins';
 
 let isWatching = false;
 const $ = gulpLoadPlugins();
@@ -83,11 +85,16 @@ function babelize(outputDir = '.tmp'){
 
     let opts        = isWatching?watchify.args:{};
     let extensions  = ['.js', '.json', '.babel'];
-    
+
     opts.extensions = extensions;
     opts.debug      = true;
+    opts.builtins   = _.assign({}, bBuiltins, {
+        'fs': require.resolve('browserfs/dist/node/core/node_fs.js'),
+        'path': require.resolve('bfs-path')
+    });
+    
     let bundle      = browserify(opts);
-  
+
     if( isWatching ){
       bundle = watchify(bundle);
     }
@@ -95,9 +102,10 @@ function babelize(outputDir = '.tmp'){
     bundle.transform(babelify.configure({
       stage: 0 ,
       extensions: extensions,
+      experimental: true,
       plugins: [require('babel-plugin-object-assign')]
     }));
-    
+
     bundle.require('./app/scripts/main.babel', {
       entry: true
     });
@@ -105,7 +113,7 @@ function babelize(outputDir = '.tmp'){
     if( isWatching === true ){
       watchBundle(bundle);
     }
-    
+
     return doBundle(bundle);
 
   }

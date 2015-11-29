@@ -24,24 +24,31 @@ button, input {
 }
 
 body {
-  background: #34495e;
+  background: #fafbfc;
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
   color: #333;
 }
 
 .ide{
+
+  background: #34495e;
   display: flex;
+
   .sidebar{
     flex: 1;
     background: #2c3e50;
   }
+
   .code-editor{
     flex: 3;
     background: #2c3e50;
   }
+
   .code-runner{
     flex: 2;
+    background: #2c3e50;
   }
+
 }
 
 #foo{
@@ -62,7 +69,6 @@ body {
 .code-runner, .sidebar, .code-editor{
   display: flex;
   flex-direction: column;
-  background: #121212;
   font-family: 'Source Code Pro', monospace;
 
   &__header{
@@ -99,6 +105,104 @@ body {
         top: 0px;
     }
 }
+
+$w: 48px;
+.user-profile{
+    display: flex;
+    align-items: center;
+
+    &__email,
+    &__name{
+        margin: 0px;
+    }
+
+    &__image-container{
+        width: $w + 4px;
+        height: $w + 4px;
+    }
+
+    &__image{
+        border: 2px solid rgba(0,0,0,0.3);
+        border-radius: $w;
+        width: $w;
+        height: $w;
+    }
+}
+.module-search{
+    background: #ecf0f1;
+    &__search-bar{
+        padding: 0px 10px;
+        background: #fff;
+    }
+
+    &__module-list{
+
+    }
+}
+
+.home-page{
+    &__add-fab{
+        position: absolute;
+        bottom: 20px;
+        right: 40px;
+    }
+}
+
+.template-card{
+    width: auto;
+    height: 360px;
+    cursor: pointer;
+    border: 1px solid #dadada;
+
+    &:active{
+        transform: scale(0.95);
+    }
+
+    .mdl-card__title-text{
+        border: 1px solid #dadada;
+        padding: 5px 10px;
+        background: #fff;
+        z-index: 10000;
+        margin: -5px;
+        margin-bottom: -17px;
+        border-bottom: 0px;
+    }
+
+    &__text{
+        border-top: 1px solid #dadada;
+        background: #fff;
+        z-index: 1000;
+        width: auto;
+    }
+
+    &--coming-soon{
+
+        position: relative;
+        opacity: 0.82;
+
+        &::after{
+            background: rgba(255, 255, 255, 0.82);
+            content: ' ';
+            position: absolute;
+            text-align: center;
+            display: block;
+            padding: 10px;
+            height: 100%;
+            width: 100%;
+            left: 0px;
+            top: 0px;
+        }
+
+    }
+}
+
+.padded-content{
+    padding: 0px 40px;
+}
+.create-project-page{
+
+}
+
 .code-runner{
   &__output{
     position: absolute;
@@ -125,10 +229,6 @@ body {
   }
 }
 
-.flex{
-  display: flex;
-}
-
 .block{
   font-family: 'Source Code Pro', monospace;
   display: inline-block;
@@ -137,22 +237,20 @@ body {
 
   &__part{
 
-
       border: 1px solid rgba(0, 0, 0, 0.2);
       position: relative;
-    //   display: inline-block;
       padding: 2px 5px;
 
-      .block--decl &{
-         background: #3498db;
+      .block--flow > * > &{
+          background: #f1c40f;
       }
 
-      .block--flow &{
-         background: #f1c40f;
-      }
-
-      .block--value &{
+      .block--value > * > &{
           background: #2ecc71;
+      }
+
+      .block--decl > * > &{
+          background: #3498db;
       }
 
       &--horizontal-expansion{
@@ -180,10 +278,10 @@ body {
       width: 5px;
       left: 0px;
       z-index: 100;
-      .block--flow &{
+      .block--flow > * > .block__neck > &{
           background: #f1c40f;
       }
-      .block--decl &{
+      .block--decl > * > .block__neck > &{
           background: #3498db;
       }
   }
@@ -259,6 +357,7 @@ body {
 }
 
 .parenthesis{
+    padding: 0px 5px;
     &::before{
         content: '(';
     }
@@ -267,7 +366,7 @@ body {
     }
 }
 
-.print-block, .def-block{
+.print-block, .def-block, .call-block{
     &__arguments{
         display: inline-block;
     }
@@ -280,7 +379,6 @@ body {
      margin-left: 0px;
   }
 }
-
 
 .list{
   &:empty{

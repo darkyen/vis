@@ -16,14 +16,8 @@ class FileStore extends Store{
 		this.code = '';
 		this.output = '';
 
-		if( localStorage.currentFile ){
-			this.file = new File(localStorage.currentFile);
-			return;
-		}
-
-		this.file = new File();
-
 	}
+
 
 	handleOutput({output}){
 		this.output = output;
@@ -62,6 +56,11 @@ class FileStore extends Store{
 		this.__emitChange();
 	}
 
+	onCodeLoadRequest({fileStr}){
+		this.file = new File(fileStr);
+		this.__emitChange();
+	}
+
 	__onDispatch(action){
 			/* do nothing */
 		// console.log('dispatcher heared', action);
@@ -95,8 +94,8 @@ class FileStore extends Store{
 				this.handleError(payload);
 			break;
 
-			default:
-				throw new Error('Unsupported event');
+			case 'code-load':
+				this.onCodeLoadRequest(payload);
 			break;
 		}
 	}

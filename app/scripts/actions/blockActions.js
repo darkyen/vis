@@ -1,6 +1,18 @@
 import _ from 'lodash';
 import dispatcher from '../dispatchers/Dispatcher';
 
+// import {getBlockClass} from '../lib/getBlock';
+
+async function createNewFile(){
+
+}
+
+// path spec
+// 1.2.3.4.3.4.5.5.1.1.22.34
+// Its simply 1 based index
+// cause 0 is taken.
+
+
 let blockActions = {
 
 
@@ -54,7 +66,6 @@ let blockActions = {
 
 		// number literal
 		if( +value == value ){
-			// number
 			type = 'literal-updated';
 		}
 

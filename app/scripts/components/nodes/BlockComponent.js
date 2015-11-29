@@ -40,7 +40,7 @@ class BlockComponent extends Component{
 		let blockProps = node.props;
 
 		let {renderer, propTypes}  = getBlockSpec(blockType, blockName);
-
+		let Renderer = renderer;
 		let className = classNames('block', {
 			'block--decl'  : blockType === BLOCK_TYPES.DECLARATION,
 			'block--value' : blockType === BLOCK_TYPES.VALUE,
@@ -67,7 +67,7 @@ class BlockComponent extends Component{
 		}, {});
 
 		return  connectDragSource(<div className={className}>
-					{renderer(blockPropValues)}
+					<Renderer {...blockPropValues} />
 				</div>);
 	}
 }
