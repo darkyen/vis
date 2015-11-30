@@ -7,6 +7,6 @@ export default def({
 	extend: Statement,
 	childTypes: [
 		Child('condition').ofType(Expression),
-		ChildArray('consequent').ofType(Statement),
+		ChildArray('body').ofType(Statement),
 	],
 });

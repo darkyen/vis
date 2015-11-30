@@ -23,9 +23,14 @@ export default class Child{
 	// prop.ofType(Bar, Bar)
 	ofType(...tClassNames){
 		return this.addTest((obj) => tClassNames.some(
-			tClassName => obj.nodeType === tClassName
+			tClassName => obj instanceof tClassName
 		));
 	}
+    notOfType(...tClasses){
+        return this.addTest((obj) => tClasses.all(
+            tClassName => !(obj instanceof tClassName)
+        ));
+    }
 
 	//  Declares that the prop must be one of the
 	//  the passed values. By convention it uses

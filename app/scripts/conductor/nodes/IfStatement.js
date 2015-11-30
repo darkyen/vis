@@ -1,6 +1,10 @@
 import {def, Child, ChildArray} from '../builder';
-import SourceCodeNode from './SourceCodeNode';
+import Statement from './Statement';
 import Expression from './Expression';
+
+// If statement has a condition which is
+// tested and allows the flow of control
+// to change as a result.
 
 export default def({
 	name: 'IfStatement',

@@ -3,6 +3,8 @@ export default class ChildArray extends Child{
 	constructor(name){
 		super(name);
 		this.notEmpty();
+        // Set this ?
+        // and this is constant
 		this.emptyValue = [];
 	}
 
@@ -11,6 +13,11 @@ export default class ChildArray extends Child{
 	}
 
 	validate(elements){
+        if( ! Array.isArray(elements) ){
+            throw new Error(
+                `mountee at ${this.nodeName} must be an array`
+            )
+        }
 		return elements.all(element => super(element));
 	}
 }
