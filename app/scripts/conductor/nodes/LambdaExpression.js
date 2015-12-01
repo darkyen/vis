@@ -24,7 +24,7 @@ export default def({
 	extend: Expression,
     childTypes: [
         ChildArray('parameters').ofType(Identifier),
-        ChildArray('body').ofType(Statement),
+        Child('body').ofType(Statement),
         // do we need to support generator lambda ?
         // Child('isGenerator').ofType(Boolean)
         //     .defaultsTo(false),

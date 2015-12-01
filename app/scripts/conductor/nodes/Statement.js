@@ -1,4 +1,5 @@
 import {def, Child, ChildArray} from '../builder';
+import SourceCodeNode from './SourceCodeNode';
 
 // Statement class is used to express Statements
 // to make subclasses like Patterns and Expressions

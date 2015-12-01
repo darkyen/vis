@@ -1,19 +1,23 @@
-export default class Child{
+import Validity from './Validity';
+import {isInstance} from '../utils/types';
+
+class Child{
 	constructor(name){
 		this.name = name;
-		this.checkers = [];
+		this.tests = [];
 	}
 
-	addTest(test){
-		this.checkers.push(test);
+	addTest(check){
+        this.tests.push(check);
 		return this;
 	}
 
 	// Not chainable
 	validate(el){
-		return this.checkers.all(
-			p => p(el)
-		);
+        let validities = this.tests.map(
+            test => test(el)
+        );
+        return Validity.merge(...validities);
 	}
 
 	// Accepts types as variadic arguments
@@ -21,15 +25,37 @@ export default class Child{
 	// any of the following given ones
 	// prop.ofType(Foo)
 	// prop.ofType(Bar, Bar)
-	ofType(...tClassNames){
-		return this.addTest((obj) => tClassNames.some(
-			tClassName => obj instanceof tClassName
-		));
+	ofType(...AllowedClasses){
+        let validTypeNames = AllowedClasses.map(
+            TClass => TClass.typeName || TClass.name
+        ).join(' or ');
+
+		return this.addTest((obj) => {
+            let isObjectOfValidType = AllowedClasses.some(
+                AllowedClass => isInstance(obj, AllowedClass)
+            );
+            return new Validity(isObjectOfValidType,
+                `${this.name} can only be type ${validTypeNames}`);
+        });
 	}
-    notOfType(...tClasses){
-        return this.addTest((obj) => tClasses.all(
-            tClassName => !(obj instanceof tClassName)
-        ));
+
+    notOfType(...NotAllowedClasses){
+        let inValidTypeNames = NotAllowedClasses.map(
+            TClass => TClass.typeName || TClass.name
+        ).join(' or ');
+
+        return this.addTest((obj) => {
+            let blamedClassName = '';
+            for(let NotAllowedClass of NotAllowedClasses){
+                if( isInstance(obj, NotAllowedClass) ){
+                    blamedClassName = NotAllowedClass.typeName || NotAllowedClass.name;
+                    break;
+                }
+            }
+
+            return new Validity(!!blamedClassName,
+                `${this.name} cannot be of type ${blamedClassName}`);
+        });
     }
 
 	//  Declares that the prop must be one of the
@@ -41,10 +67,28 @@ export default class Child{
 	//		prop.isOneOf(...possibleValues);
 	//	```
 	isOneOf(...posVals){
-		return this.addTest((obj) => posVals.some(
-			posVal => Object.is(posVal, obj)
-		));
+		return this.addTest((obj) => {
+            let isObjOneOfPosVals = posVals.some(
+                posVal => Object.is(posVal, obj)
+            );
+            return new Validity(isObjectOfValidType,
+                `${this.name} can only be one of ${posVals.join(', ')}`);
+        }, 'isOneOf');
 	}
+
+    isNoneOf(...imposVals){
+        return this.addTest((obj) => {
+            let isImposs = '';
+            for(let imposVal of imposVals ){
+                if( Object.is(imposVal, obj) ){
+                    isImposs = true;
+                    break;
+                }
+            }
+            return new Validity(isImposs,
+                `${this.name} cannot be ${obj}`);
+        });
+    }
 
 	defaultsTo(value){
 		this.emptyValue = value;
@@ -54,6 +98,14 @@ export default class Child{
 	// defines that the can't be empty
 	// prop.cannotBeEmpty();
 	cannotBeEmpty(){
-		return this.addTest((obj) => !!obj);
+		return this.addTest((obj) => {
+            return new Validity(!!obj,
+                `${this.name} cannot be empty`);
+        });
 	}
+}
+
+export {Child};
+export default function CreateChild(...args){
+    return new Child(...args);
 }

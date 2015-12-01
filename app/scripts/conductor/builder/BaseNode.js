@@ -1,40 +1,28 @@
-import {readonly} from 'core-decorators';
+import {Child} from './Child';
+import {ChildArray} from './ChildArray';
+import Validity from './Validity';
 // Basenode is the class from which all the spec-nodes are defined
 class BaseNode {
-
+    static typeName   = 'BaseNode';
 	static childTypes = [];
 
-	constructor(nodeName, parent){
+	constructor(nodeName){
+        // always valid !
+        this.validity = new Validity(true, '');
 		this.nodeName = nodeName;
-		this.__parent = parent;
+        this.children = [];
 		this.arrView  = [];
 	}
 
 	// this manages a cache
 	__updateCache(){
-		const {nodeName} = this;
-		this.arrView = [
-			nodeName,
-			...this.children
-		];
+		const {nodeName, children} = this;
+		this.arrView = [nodeName, ...children];
 	}
-
-	@readonly
-	children = [];
-
-	set parent(node){
-		if( !(node instanceof BaseNode) && node !== null ){
-			throw new Error(
-				`node is not an instance of ${BaseNode}` +
-				`varDump : ${node.nodeType}`
-			)
-		}
-		this.__parent = node;
-	}
-
-	get parent(){
-		return this.__parent;
-	}
+    
+    toString(){
+        return `[${this.toArr().toString()}]`;
+    }
 
 	// @TODO: Implement path setter and getter
 	// get path(){
@@ -45,65 +33,50 @@ class BaseNode {
 	// 	throw new Error('Cannot set path');
 	// }
 	// cached value
+
 	toArr(){
 		return this.arrView;
 	}
 
-	removeChild(childName){
-		console.warn(
-			`Attempted to remove ${childName} ` +
-			`from ${this.name}that does not exist`
-		);
-	}
-
 	// Mounts a child and checks for childType
-	__mountChild(childType, prop){
-		if( !childType.isValid(prop) ){
-			throw new Error(
-				`Cannot mount ${childType.propName}` +
-				`in ${this.nodeName} varDump ` +
-				`: ${JSON.stringify(prop)}`
-			);
-		}
-		this.children[childType.idx] = prop;
-		prop.parent = this;
+    // also updates validity, this validity can
+    // be used by both the ast walker and the
+    // ide to mark / throw issues.
+	__mountChild(childType, childValue){
+
+        let validity = childType.validate(childValue);
+        // console.log('Validity :', validity);
+        // console.log(`mounting ${childType.name} at idx: ${childType.idx} in ${this.nodeName}`)
+        this.validity = validity;
+        this.children[childType.idx] = childValue || childType.emptyValue;
+        this.__updateCache();
 	}
 
-	// Set to default value
-	__unmountChild(idx){
-		let prop = this.children[idx];
-		this.children[idx] = propTypes[idx].emptyValue;
-		prop.parent = null;
-	}
-
-	__define({set, get}){
-		Object.defineProperty(this, name, {
-			writable : false,
+	__define({name, set, get}){
+        // console.log(`Defining ${name} for object of type ${this.nodeName}`);
+    	Object.defineProperty(this, name, {
 			enumerable: true,
 			set, get
 		});
-
 	}
 
 	// Converts the Prop Index Notation
 	// Creates a Getter and Setter
 	__createSettersAndGetters(childTypes){
 		childTypes.forEach((childType) => {
-			const {name, idx} = childType;
+			const {name, idx, emptyValue} = childType;
 			if( childType instanceof ChildArray ){
                 // @TODO:
                 // Arrays should have differrent way of doing things
                 throw new Error('Not implemented')
 			}
             this.__define({
+                name,
                 set(value){
-                    if( this.children[idx] ){
-                        this.__removeChild(idx);
-                    }
                     this.__mountChild(childType, value);
                 },
                 get(){
-                    this.children[idx];
+                    return this.children[idx];
                 }
             })
             return;
@@ -111,6 +84,8 @@ class BaseNode {
 	}
 
 	// intialize default values
+    // @TODO: This must follow the validation
+    // route.
 	__initializeDefaults(childTypes){
 		childTypes.forEach((childType) => {
 			let {emptyValue, idx} = childType;
@@ -120,6 +95,5 @@ class BaseNode {
 	}
 
 };
-
 
 export default BaseNode;

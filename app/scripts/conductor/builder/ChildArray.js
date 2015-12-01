@@ -1,10 +1,9 @@
-import Child from './Child';
-export default class ChildArray extends Child{
+import {Child} from './Child';
+
+class ChildArray extends Child{
 	constructor(name){
 		super(name);
-		this.notEmpty();
-        // Set this ?
-        // and this is constant
+		this.cannotBeEmpty();
 		this.emptyValue = [];
 	}
 
@@ -18,6 +17,15 @@ export default class ChildArray extends Child{
                 `mountee at ${this.nodeName} must be an array`
             )
         }
-		return elements.all(element => super(element));
+		return elements.every(element => super.validate(element));
 	}
+}
+
+    // This is rarely used
+// mostly the pattern is to do
+// Child instead of new Child
+export {ChildArray};
+
+export default function CreateChildArray(...args){
+    return new ChildArray(...args);
 }

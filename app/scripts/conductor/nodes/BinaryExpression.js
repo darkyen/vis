@@ -20,15 +20,15 @@ export default def({
     name: 'BinaryExpression',
     extend: Expression,
     childTypes: [
-        Prop('operator').ofType(String).isOneOf(...validOperators),
+        Child('operator').ofType(String).isOneOf(...validOperators),
         // Since this supports Expression Literal, Identifiers
         // can also go inside here, @TODO: Should we mention
         // Identifier and Expression Explicitely here because
         // Lamba Expression cannot go in here imagine
         // foo + (lambda k : 3 * k)
-        Prop('right').ofType(Expression)
+        Child('right').ofType(Expression)
             .notOfType(LambdaExpression),
-        Prop('left').ofType(Expression)
+        Child('left').ofType(Expression)
             .notOfType(LambdaExpression)
     ]
 });

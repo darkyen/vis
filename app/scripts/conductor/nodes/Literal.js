@@ -9,7 +9,7 @@ import Expression from './Statement';
 
 export default def({
     name: 'Literal',
-    extend: Expression
+    extend: Expression,
     childTypes: [
         Child('value').ofType(String, Number, Boolean)
     ],

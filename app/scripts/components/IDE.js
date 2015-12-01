@@ -6,9 +6,10 @@ import {Container} from 'flux/utils';
 import CodeEditor from './CodeEditor';
 import CodeRunner from './CodeRunner';
 import fileStore from '../stores/fileStore';
-import NodeComponent from './nodes/NodeComponent';
-import {compiler, blocks, builder} from '../conductor';
+// import {compiler, blocks, builder} from '../conductor';
 import {compileAndRun} from '../actions/ideActions';
+import conductor from '../conductor';
+window.conductor = conductor;
 
 class IDE extends Component{
 	constructor(props){

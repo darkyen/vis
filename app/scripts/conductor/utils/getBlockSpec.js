@@ -8,6 +8,9 @@ let blockSpecMap = [].reduce( (blockMap, blockSpec) => {
 }, {});
 
 let getBlockSpec = (blockType, blockName) =>{
+	console.warn(
+		"Do not use this anymore use the much better getASTNodeClassByName"
+	);
 	if( !blockSpecMap[blockType] ){
 		throw new Error(`blockType ${blockType}is not in the dictionary`);
 	}

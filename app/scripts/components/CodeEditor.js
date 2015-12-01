@@ -1,13 +1,6 @@
 import React, {Component} from 'react';
 import BlockDropZone from './BlockDropZone';
 import blockActions from '../actions/blockActions';
-import NodeComponent from './nodes/NodeComponent';
-import {NODE_TYPES, BLOCK_TYPES} from '../conductor/core';
-
-let topLevelPropTypes = {
-	nodeTypes:  [NODE_TYPES.BLOCK],
-	blockTypes: [BLOCK_TYPES.FLOW, BLOCK_TYPES.DECLARATION],
-};
 
 class CodeEditor extends Component{
 	constructor(props){
@@ -18,7 +11,7 @@ class CodeEditor extends Component{
 
 	render(){
 		let {file} = this.props;
-		// console.log(file.code);
+
 		return 	<div className="code-editor">
 					<header className="code-editor__header">Code</header>
 					<BlockDropZone

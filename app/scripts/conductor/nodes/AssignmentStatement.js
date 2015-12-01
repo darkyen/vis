@@ -1,7 +1,7 @@
 import {def, Child, ChildArray} from '../builder';
 import Identifier from './Identifier';
 import Expression from './Expression';
-
+import Statement from './Statement';
 // Assigment Statement is a statement where
 // you use a statement to assign something
 // to something else.
@@ -33,9 +33,7 @@ const validOperators = [
 // expressed by change x by (someNumber) where
 // the behavior depends on the sign.
 
-// We follow python way of doing things where
-// Number(x) + String(y) throws an error
-// IE explicit type coercion.
+
 
 // we do not support chaining of Assignment
 // so far but maybe we can add that in future.
@@ -43,8 +41,8 @@ export default def({
     name: 'AssignmentStatement',
     extend: Statement,
     childTypes: [
-        Prop('operator').ofType(String).isOneOf(...validOperators),
-        Prop('right').ofType(Expression),
-        Prop('left').ofType(Identifier)
+        Child('operator').ofType(String).isOneOf(...validOperators),
+        Child('right').ofType(Expression),
+        Child('left').ofType(Identifier)
     ]
 });

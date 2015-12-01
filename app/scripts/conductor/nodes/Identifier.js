@@ -1,6 +1,6 @@
 import {def, Child, ChildArray} from '../builder';
+import Validity from '../builder/Validity';
 import Expression from './Statement';
-
 // TLDR; Identifiers are our variables
 
 // An identifier is a name that identifies (that is,
@@ -12,11 +12,12 @@ import Expression from './Statement';
 
 export default def({
     name: 'Identifier',
-    extend: Expression
+    extend: Expression,
     childTypes: [
         Child('name').ofType(String)
-            .addChecker( (name) => {
-                return (/^[$A-Z_][0-9A-Z_$]*$/i).test(name)
+            .addTest( (name) => {
+                return new Validity((/^[$A-Z_][0-9A-Z_$]*$/i).test(name),
+                'Cannot have spaces or special characters in identifiers');
             })
     ],
 });
