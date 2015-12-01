@@ -29,10 +29,16 @@ export default function def({name, childTypes=[], extend = BaseNode}){
 		// the name is a lie, the name is name
         // ^the comment was written when I was
         // probably drunk.
-		constructor(nodeName=name){
-			super(nodeName);
-			this.__createSettersAndGetters(childTypes);
-			this.__initializeDefaults(childTypes);
+		constructor(...childValues){
+			super(...childValues);
+            this.nodeName = name;
+            this.__assignAndValidate(childTypes, childValues);
 		}
+
+        static
 	}
 };
+
+
+// Identifier.createFrom(id, [c,h,i,l,d,r,e,n])
+// createIdentifier(...props);

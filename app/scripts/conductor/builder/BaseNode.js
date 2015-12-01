@@ -6,10 +6,10 @@ class BaseNode {
     static typeName   = 'BaseNode';
 	static childTypes = [];
 
-	constructor(nodeName){
+	constructor(){
         // always valid !
-        this.validity = new Validity(true, '');
-		this.nodeName = nodeName;
+		this.nodeName = 'BaseNode';
+        this.__validities = [];
         this.children = [];
 		this.arrView  = [];
 	}
@@ -19,7 +19,7 @@ class BaseNode {
 		const {nodeName, children} = this;
 		this.arrView = [nodeName, ...children];
 	}
-    
+
     toString(){
         return `[${this.toArr().toString()}]`;
     }
@@ -42,57 +42,29 @@ class BaseNode {
     // also updates validity, this validity can
     // be used by both the ast walker and the
     // ide to mark / throw issues.
-	__mountChild(childType, childValue){
+	__mountChild(idx, childValue, emptyValue){
+        this.children[idx] = childValue;
+	}
 
-        let validity = childType.validate(childValue);
-        // console.log('Validity :', validity);
-        // console.log(`mounting ${childType.name} at idx: ${childType.idx} in ${this.nodeName}`)
-        this.validity = validity;
-        this.children[childType.idx] = childValue || childType.emptyValue;
+    __validateChildren(childTypes){
+        for (const childType of childTypes ){
+            const {idx} = childType;
+            const childValue = this.children[childType.idx];
+            this.__validities[idx] = childType.validate(childValue);
+        };
+    }
+
+    get validity(){
+        return Validity.merge(...this.__validities);
+    }
+
+    __assignAndValidate(childTypes, childValues){
+        childTypes.forEach((childType) => {
+            let {idx, emptyValue} = childType.idx;
+            this.__mountChild(idx, childValues[idx], emptyValue);
+        });
         this.__updateCache();
-	}
-
-	__define({name, set, get}){
-        // console.log(`Defining ${name} for object of type ${this.nodeName}`);
-    	Object.defineProperty(this, name, {
-			enumerable: true,
-			set, get
-		});
-	}
-
-	// Converts the Prop Index Notation
-	// Creates a Getter and Setter
-	__createSettersAndGetters(childTypes){
-		childTypes.forEach((childType) => {
-			const {name, idx, emptyValue} = childType;
-			if( childType instanceof ChildArray ){
-                // @TODO:
-                // Arrays should have differrent way of doing things
-                throw new Error('Not implemented')
-			}
-            this.__define({
-                name,
-                set(value){
-                    this.__mountChild(childType, value);
-                },
-                get(){
-                    return this.children[idx];
-                }
-            })
-            return;
-		});
-	}
-
-	// intialize default values
-    // @TODO: This must follow the validation
-    // route.
-	__initializeDefaults(childTypes){
-		childTypes.forEach((childType) => {
-			let {emptyValue, idx} = childType;
-			this.children[idx] = emptyValue;
-		});
-		this.__updateCache();
-	}
+    }
 
 };
 
