@@ -17,24 +17,36 @@ export default function def({name, childTypes=[], extend = BaseNode}){
 		childType.idx = idx + offset;
 	});
 
-	return class extends BaseType{
+	function getChildTypeByIdx(idx){
+		return childTypes[idx - offset];
+	}
+
+	class TempClass extends BaseType{
 		// statics help only in defining the class name or stuff
 		static typeName = name;
 
 		// helps with finding childtypes
 		static childTypes = BaseType.childTypes.concat(childTypes);
 
-        // this constructor is more or less
-		// a wrapper function the name is hack
-		// the name is a lie, the name is name
-        // ^the comment was written when I was
-        // probably drunk.
+		// @TODO: Make the constructor
+		// lighter
+
+		// expose constructor
 		constructor(...childValues){
+			let appChildTypes = childTypes;
 			super(...childValues);
             this.nodeName = name;
-            this.__assignAndValidate(childTypes, childValues);
+			// is called with values
+			if( childValues[0] instanceof BaseNode ){
+				appChildTypes = Object.keys(childValues[1])
+					.map(getChildTypeByIdx).filter(Boolean)
+				childValues   = childValues[1];
+			}
+        	this.__assignAndValidate(appChildTypes, childValues);
 		}
 	}
+
+	return TempClass;
 };
 
 

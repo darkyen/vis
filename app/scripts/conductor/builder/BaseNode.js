@@ -23,10 +23,16 @@ class BaseNode {
     static typeName   = 'BaseNode';
 	static childTypes = [];
 
-	constructor(){
-		this.nodeName = 'BaseNode';
-        this.__validities = [];
-        this.children = [];
+	constructor(node){
+        if( node instanceof BaseNode ){
+            this.nodeName = node.nodeName;
+            this.__validities = node.__validities;
+            this.children = node.children;
+        }else{
+            this.nodeName = 'BaseNode';
+            this.__validities = [];
+            this.children = [];
+        }
 		this.arrView  = [];
 	}
 
@@ -68,18 +74,19 @@ class BaseNode {
     	const keys = Object.keys(newPropMap);
         const Ctr = getCtrOf(this);
         const keyLen = keys.length;
+        const updatedProps = {};
         let chIdx, aIdx, key;
         for( let i = 0; i < keyLen; i++ ){
             key = keys[i];
             [chIdx, aIdx] = key.split(':');
             if( aIdx ){
                 children[chIdx][aIdx] = newPropMap[key];
-                continue;
+                newPropMap[key] = children[chIdx];
             }
-            children[chIdx] = newPropMap[key];
+            updatedProps[chIdx] = newPropMap[key];
         }
 
-    	return new Ctr(...children);
+    	return new Ctr(this, updatedProps);
     }
 
     // the new path spec uses two symbols . and :
