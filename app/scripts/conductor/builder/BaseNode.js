@@ -37,7 +37,6 @@ class BaseNode {
     // be used by both the ast walker and the
     // ide to mark / throw issues.
 	__mountChild(idx, childValue, emptyValue){
-        console.log(idx, childValue, emptyValue);
         this.children[idx] = childValue || emptyValue;
 	}
 
@@ -55,7 +54,7 @@ class BaseNode {
 
     __assignAndValidate(childTypes, childValues){
         childTypes.forEach((childType) => {
-            let {idx, emptyValue} = childType;
+            const {idx, emptyValue} = childType;
             this.__mountChild(idx, childValues[idx], emptyValue);
         });
         this.__updateCache();
