@@ -1,13 +1,16 @@
 import {Child} from './Child';
 import {ChildArray} from './ChildArray';
 import Validity from './Validity';
+
 // Basenode is the class from which all the spec-nodes are defined
+// This houses hidden properties from the nodes and also manages
+// validity all the derived classes barely assign the methods
+// and declare a static prop on them.
 class BaseNode {
     static typeName   = 'BaseNode';
 	static childTypes = [];
 
 	constructor(){
-        // always valid !
 		this.nodeName = 'BaseNode';
         this.__validities = [];
         this.children = [];
@@ -57,6 +60,40 @@ class BaseNode {
         });
         this.__updateCache();
     }
+
+    // can clone any node with new props
+    cloneNode(newPropMap={}){
+    	const {nodeName, children} = this;
+    	const keys = Object.keys(newPropMap);
+    	keys.forEach(key => {
+    		const [chIdx, aIdx] = key.split(':');
+    		if( aIdx ){
+    			children[chIdx] = children[chIdx].slice(0);
+    			children[chIdx][aIdx] = newPropMap[key];
+    			return;
+    		}
+    		children[chIdx] = newPropMap[key];
+    	});
+    	return new this.prototype.constructor(...children);
+    }
+
+    // the new path spec
+    // . and :
+    // . denotes nodes children
+    // : denotes nodes children's children
+    updateDeep(parts, updatedNode){
+    	const nodeAddress = parts.pop();
+    	// need to visit even further
+    	if(parts.length){
+    		const [chIdx, aIdx] = nodeAddress.split(':');
+    		const ownerNode = aIdx?this.children[chIdx][aIdx]:this.children[chIdx];
+    		updatedNode = ownerNode.updateDeep(parts, updatedNode);
+    	}
+
+    	return cloneNode(node, {
+    		[nodeAddress]: updatedNode
+    	});
+    };
 
 };
 
