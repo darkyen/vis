@@ -24,7 +24,7 @@ class ChildArray extends Child{
                     validity = test(el);
                     validity.reason = `${idx} : validity.reason`
                 }
-            );
+            )
         ));
         return Validity.merge(...validities);
 	}

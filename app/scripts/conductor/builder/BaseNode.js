@@ -1,6 +1,7 @@
 import {Child} from './Child';
 import {ChildArray} from './ChildArray';
 import Validity from './Validity';
+import getCtrOf from '../utils/getConstructorOf';
 
 // Basenode is the class from which all the spec-nodes are defined
 // This houses hidden properties from the nodes and also manages
@@ -64,6 +65,7 @@ class BaseNode {
     cloneNode(newPropMap={}){
     	const {nodeName, children} = this;
     	const keys = Object.keys(newPropMap);
+        const Ctr = getCtrOf(this);
     	keys.forEach(key => {
     		const [chIdx, aIdx] = key.split(':');
     		if( aIdx ){
@@ -72,11 +74,10 @@ class BaseNode {
     		}
     		children[chIdx] = newPropMap[key];
     	});
-    	return new this.prototype.constructor(...children);
+    	return new Ctr(...children);
     }
 
-    // the new path spec
-    // . and :
+    // the new path spec uses two symbols . and :
     // . denotes nodes children
     // : denotes nodes children's children
     // @TODO: maybe rename this to clone deep ?
