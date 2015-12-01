@@ -67,7 +67,6 @@ class BaseNode {
     	keys.forEach(key => {
     		const [chIdx, aIdx] = key.split(':');
     		if( aIdx ){
-    			children[chIdx] = children[chIdx].slice(0);
     			children[chIdx][aIdx] = newPropMap[key];
     			return;
     		}
@@ -80,16 +79,17 @@ class BaseNode {
     // . and :
     // . denotes nodes children
     // : denotes nodes children's children
+    // @TODO: maybe rename this to clone deep ?
     updateDeep(parts, updatedNode){
     	const nodeAddress = parts.pop();
     	// need to visit even further
-    	if(parts.length){
+    	if( parts.length ){
     		const [chIdx, aIdx] = nodeAddress.split(':');
     		const ownerNode = aIdx?this.children[chIdx][aIdx]:this.children[chIdx];
     		updatedNode = ownerNode.updateDeep(parts, updatedNode);
     	}
 
-    	return cloneNode(node, {
+    	return this.cloneNode({
     		[nodeAddress]: updatedNode
     	});
     };

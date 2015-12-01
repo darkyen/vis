@@ -14,7 +14,7 @@ class Child{
 
 	// Not chainable
 	validate(el){
-        let validities = this.tests.map(
+        const validities = this.tests.map(
             test => test(el)
         );
         return Validity.merge(...validities);
@@ -26,12 +26,12 @@ class Child{
 	// prop.ofType(Foo)
 	// prop.ofType(Bar, Bar)
 	ofType(...AllowedClasses){
-        let validTypeNames = AllowedClasses.map(
+        const validTypeNames = AllowedClasses.map(
             TClass => TClass.typeName || TClass.name
         ).join(' or ');
 
 		return this.addTest((obj) => {
-            let isObjectOfValidType = AllowedClasses.some(
+            const isObjectOfValidType = AllowedClasses.some(
                 AllowedClass => isInstance(obj, AllowedClass)
             );
             return new Validity(isObjectOfValidType,
@@ -40,7 +40,7 @@ class Child{
 	}
 
     notOfType(...NotAllowedClasses){
-        let inValidTypeNames = NotAllowedClasses.map(
+        const inValidTypeNames = NotAllowedClasses.map(
             TClass => TClass.typeName || TClass.name
         ).join(' or ');
 
@@ -68,7 +68,7 @@ class Child{
 	//	```
 	isOneOf(...posVals){
 		return this.addTest((obj) => {
-            let isObjOneOfPosVals = posVals.some(
+            const isObjOneOfPosVals = posVals.some(
                 posVal => Object.is(posVal, obj)
             );
             return new Validity(isObjectOfValidType,
