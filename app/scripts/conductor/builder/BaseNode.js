@@ -2,11 +2,23 @@ import {Child} from './Child';
 import {ChildArray} from './ChildArray';
 import Validity from './Validity';
 import getCtrOf from '../utils/getConstructorOf';
-
+import {isBaseInstance} from '../utils/types';
 // Basenode is the class from which all the spec-nodes are defined
 // This houses hidden properties from the nodes and also manages
 // validity all the derived classes barely assign the methods
 // and declare a static prop on them.
+function convertChildToArr(child){
+    if( Array.isArray(child) ){
+        return child.map(convertChildToArr);
+    }
+
+    if( isBaseInstance(child) ){
+        return child;
+    }
+
+    return child.toArr();
+};
+
 class BaseNode {
     static typeName   = 'BaseNode';
 	static childTypes = [];
@@ -20,8 +32,12 @@ class BaseNode {
 
 	// this manages a cache
 	__updateCache(){
-		const {nodeName, children} = this;
-		this.arrView = [nodeName, ...children];
+        const {nodeName, children} = this;
+        const compiledChildren = children.map(convertChildToArr);
+        this.arrView = [nodeName, ...compiledChildren];
+        this.arrView['validity'] = Validity.merge(
+            ...this.__validities
+        );
 	}
 
     toString(){
@@ -29,36 +45,21 @@ class BaseNode {
     }
 
 	toArr(){
-        this['validity'] = this.validity;
 		return this.arrView;
 	}
 
-	// Mounts a child and checks for childType
-    // also updates validity, this validity can
-    // be used by both the ast walker and the
-    // ide to mark / throw issues.
-	__mountChild(idx, childValue, emptyValue){
-        this.children[idx] = childValue || emptyValue;
-	}
-
-    __validateChildren(childTypes){
-        for (const childType of childTypes ){
-            const {idx} = childType;
-            const childValue = this.children[childType.idx];
-            this.__validities[idx] = childType.validate(childValue);
-        };
-    }
-
-    get validity(){
-        return Validity.merge(...this.__validities);
-    }
-
     __assignAndValidate(childTypes, childValues){
-        childTypes.forEach((childType) => {
-            const {idx, emptyValue} = childType;
-            this.__mountChild(idx, childValues[idx], emptyValue);
-        });
-        this.__updateCache();
+        let childTypeLen = childTypes.length;
+        let childType, idx, emptyValue, childValue;
+        for( let i = 0; i < childTypeLen; i++ ){
+            childType = childTypes[i];
+            idx = childType.idx;
+            emptyValue = childType.emptyValue;
+            childValue = childValues[idx];
+            this.children[idx] = childValue || emptyValue;
+            this.__validities[idx] = childType.validate(childValue);
+        }
+        // this.__updateCache();
     }
 
     // can clone any node with new props
@@ -66,14 +67,18 @@ class BaseNode {
     	const {nodeName, children} = this;
     	const keys = Object.keys(newPropMap);
         const Ctr = getCtrOf(this);
-    	keys.forEach(key => {
-    		const [chIdx, aIdx] = key.split(':');
-    		if( aIdx ){
-    			children[chIdx][aIdx] = newPropMap[key];
-    			return;
-    		}
-    		children[chIdx] = newPropMap[key];
-    	});
+        const keyLen = keys.length;
+        let chIdx, aIdx, key;
+        for( let i = 0; i < keyLen; i++ ){
+            key = keys[i];
+            [chIdx, aIdx] = key.split(':');
+            if( aIdx ){
+                children[chIdx][aIdx] = newPropMap[key];
+                continue;
+            }
+            children[chIdx] = newPropMap[key];
+        }
+
     	return new Ctr(...children);
     }
 

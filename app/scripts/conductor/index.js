@@ -3,11 +3,8 @@ import builder from './builder';
 const namedBuilders = {};
 
 for(let ASTNode of ASTNodes ){
-
-	namedBuilders[`create${ASTNode.typeName}`] = (...args) => {
-		return new ASTNode(...args);
-	};
-
+	namedBuilders[`create${ASTNode.typeName}`] =
+	 	(...args) => new ASTNode(...args);
 }
 
 

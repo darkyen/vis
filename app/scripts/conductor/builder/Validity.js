@@ -1,5 +1,9 @@
 // Contains Validity and helpful messages
 // on invalidity.
+function isValidFn(validity){
+    return validity.isValid;
+}
+
 export default class Validity{
     constructor(isValid, reason){
         this.isInValid = !isValid;
@@ -8,11 +12,17 @@ export default class Validity{
     }
 
     static merge(...validities){
-        let isValid = validities.every( validity => validity.isValid );
-        let reason  = validities
-                        .filter( validity => validity.isInValid )
-                        .map ( t => t.reason )
-                        .join(' & ');
+        let isValid = validities.every(isValidFn);
+        let reason = [];
+        if( !isValid ){
+            let validityLen = validities.length;
+            for(let i = 0; i < validityLen; i++){
+                if( validity.isInValid ){
+                    reason.push(validities[i].reason);
+                }
+            }
+        }
+        reason = reason.join(' & ');
         return new Validity(isValid, reason);
     }
 }

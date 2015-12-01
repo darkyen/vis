@@ -23,7 +23,7 @@ export default function def({name, childTypes=[], extend = BaseNode}){
 
 		// helps with finding childtypes
 		static childTypes = BaseType.childTypes.concat(childTypes);
-        
+
         // this constructor is more or less
 		// a wrapper function the name is hack
 		// the name is a lie, the name is name
