@@ -14,6 +14,7 @@ const Transformer = (ASTClass) => {
             // +1 because of the shift.
             out[name] = inputArr[idx + 1];
         }
+        out.validity = inputArr.validity;
         return out;
     }
 

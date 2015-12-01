@@ -24,17 +24,8 @@ class BaseNode {
         return `[${this.toArr().toString()}]`;
     }
 
-	// @TODO: Implement path setter and getter
-	// get path(){
-	// 	return this.__parent ? this.__parent.getPath() : '$'
-	// }
-
-	// set path(t){
-	// 	throw new Error('Cannot set path');
-	// }
-	// cached value
-
 	toArr(){
+        this['validity'] = this.validity;
 		return this.arrView;
 	}
 
@@ -43,7 +34,8 @@ class BaseNode {
     // be used by both the ast walker and the
     // ide to mark / throw issues.
 	__mountChild(idx, childValue, emptyValue){
-        this.children[idx] = childValue;
+        console.log(idx, childValue, emptyValue);
+        this.children[idx] = childValue || emptyValue;
 	}
 
     __validateChildren(childTypes){
@@ -60,7 +52,7 @@ class BaseNode {
 
     __assignAndValidate(childTypes, childValues){
         childTypes.forEach((childType) => {
-            let {idx, emptyValue} = childType.idx;
+            let {idx, emptyValue} = childType;
             this.__mountChild(idx, childValues[idx], emptyValue);
         });
         this.__updateCache();

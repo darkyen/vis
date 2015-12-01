@@ -34,8 +34,6 @@ export default function def({name, childTypes=[], extend = BaseNode}){
             this.nodeName = name;
             this.__assignAndValidate(childTypes, childValues);
 		}
-
-        static
 	}
 };
 
