@@ -42,7 +42,7 @@ export default def({
     extend: Statement,
     childTypes: [
         Child('operator').ofType(String).isOneOf(...validOperators),
-        Child('right').ofType(Expression),
-        Child('left').ofType(Identifier)
+        Child('right').ofType(Expression).cannotBeEmpty(),
+        Child('left').ofType(Identifier).cannotBeEmpty()
     ]
 });

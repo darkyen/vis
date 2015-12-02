@@ -11,7 +11,7 @@ export default def({
 	name: 'CallStatement',
 	extend: Statement,
     childTypes: [
-        Child('name').ofType(Identifier),
-        ChildArray('parameters').ofType(Identifier),
+        Child('name').ofType(Identifier).cannotBeEmpty(),
+        ChildArray('parameters').ofType(Expression),
     ]
 });

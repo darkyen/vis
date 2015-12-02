@@ -6,7 +6,7 @@ export default def({
 	name: 'WhileStatement',
 	extend: Statement,
 	childTypes: [
-		Child('condition').ofType(Expression),
+		Child('condition').ofType(Expression).cannotBeEmpty(),
 		ChildArray('body').ofType(Statement),
 	],
 });

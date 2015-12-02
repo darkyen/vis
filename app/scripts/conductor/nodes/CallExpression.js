@@ -17,7 +17,7 @@ export default def({
 	name: 'CallExpression',
 	extend: Expression,
     childTypes: [
-        Child('name').ofType(Identifier),
+        Child('name').ofType(Identifier).cannotBeEmpty(),
         ChildArray('parameters').ofType(Expression),
     ]
 });

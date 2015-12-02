@@ -11,6 +11,6 @@ export default def({
     name: 'Literal',
     extend: Expression,
     childTypes: [
-        Child('value').ofType(String, Number, Boolean)
+        Child('value').ofType(String, Number, Boolean).cannotBeEmpty()
     ],
 });

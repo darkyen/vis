@@ -12,7 +12,7 @@ export default def({
     // you must declare them or use lambda like python
 	extend: Declaration,
     childTypes: [
-        Child('name').ofType(Identifier),
+        Child('name').ofType(Identifier).cannotBeEmpty(),
         ChildArray('parameters').ofType(Identifier),
         ChildArray('defaults').ofType(Expression),
         ChildArray('body').ofType(Statement),

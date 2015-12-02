@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import React, {Component}  from 'react';
 // Converts 1.5 V voltage in your RAM to 20000000MV !
 
 // Not really just a simple Higher order component which
@@ -39,3 +39,5 @@ const Transformer = (ASTClass) => {
         }
     }
 }
+
+export default Transformer;

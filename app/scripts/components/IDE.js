@@ -6,29 +6,7 @@ import {Container} from 'flux/utils';
 import CodeEditor from './CodeEditor';
 import CodeRunner from './CodeRunner';
 import fileStore from '../stores/fileStore';
-// import {compiler, blocks, builder} from '../conductor';
 import {compileAndRun} from '../actions/ideActions';
-import conductor from '../conductor';
-window.conductor = conductor;
-
-setTimeout(function(){
-	console.time('10000 create');
-	var wa, i;
-	var c = conductor.namedBuilders.createIdentifier;
-	for(i = 0; i < 10000; i ++ ){
-	   wa = c('', '', 'woo');
-	}
-	console.timeEnd('10000 create');
-
-	console.time('10000 clones');
-	for(i = 0; i < 10000; i ++ ){
-	   wa = wa.cloneNode({
-		   2: 'baz'
-	   });
-	}
-	console.timeEnd('10000 clones');
-}, 5000);
-
 class IDE extends Component{
 	constructor(props){
 		super(props);

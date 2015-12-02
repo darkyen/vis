@@ -11,7 +11,7 @@ export default def({
     extend: Expression,
     childTypes: [
         Child('operator').ofType(String).isOneOf(...validOperators),
-        Child('right').ofType(Expression),
-        Child('left').ofType(Expression)
+        Child('right').ofType(Expression).cannotBeEmpty(),
+        Child('left').ofType(Expression).cannotBeEmpty()
     ]
 });

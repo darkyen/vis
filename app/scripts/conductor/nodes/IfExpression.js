@@ -13,9 +13,9 @@ export default def({
 	name: 'IfExpression',
 	extend: Expression,
 	childTypes: [
-		Child('condition').ofType(Expression)
+		Child('condition').ofType(Expression).cannotBeEmpty()
             .notOfType(LambdaExpression),
-		Child('consequent').ofType(Expression),
+		Child('consequent').ofType(Expression).cannotBeEmpty(),
         Child('alternate').ofType(Expression)
 	],
 });

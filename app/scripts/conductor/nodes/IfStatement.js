@@ -10,7 +10,7 @@ export default def({
 	name: 'IfStatement',
 	extend: Statement,
 	childTypes: [
-		Child('condition').ofType(Expression),
+		Child('condition').ofType(Expression).cannotBeEmpty(),
 		ChildArray('consequent').ofType(Statement),
 	],
 });

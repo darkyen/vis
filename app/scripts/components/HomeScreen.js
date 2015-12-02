@@ -11,6 +11,10 @@ import SuperPromise from 'superagent-promise';
 import userStore from '../stores/userStore';
 import userActions from '../actions/userActions';
 
+import conductor from '../conductor';
+import NodeComponent from './nodes/NodeComponent';
+
+
 let superPromise = SuperPromise(superagent, Promise);
 
 class PackageCard extends Component{
@@ -112,8 +116,8 @@ class SearchBarComponent extends Component{
     }
 }
 
-let MountableUserProfileComponent = Container.create(UserProfileContainer);
-
+const MountableUserProfileComponent = Container.create(UserProfileContainer);
+const n = conductor.namedBuilders.createIfStatement();
 class HomePage extends Component{
     constructor(p){
         super(p);
@@ -136,6 +140,7 @@ class HomePage extends Component{
                     <MDL.FABButton className="home-page__add-fab" ripple>
                         <MDL.Icon name="add" />
                     </MDL.FABButton>
+                    <NodeComponent node={n.toArr()}/>
                 </MDL.Content>
                </MDL.Layout>;
     }

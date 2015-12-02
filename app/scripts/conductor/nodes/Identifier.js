@@ -10,11 +10,13 @@ import Expression from './Statement';
 // (or class thereof), or physical [noncountable]
 // substance (or class thereof).
 
+// fuck.
 export default def({
     name: 'Identifier',
     extend: Expression,
     childTypes: [
         Child('name').ofType(String)
+            .cannotBeEmpty()
             .addTest( (name) => {
                 return new Validity((/^[$A-Z_][0-9A-Z_$]*$/i).test(name),
                 'Cannot have spaces or special characters in identifiers');

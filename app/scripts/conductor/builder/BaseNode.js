@@ -8,6 +8,7 @@ import {isBaseInstance} from '../utils/types';
 // validity all the derived classes barely assign the methods
 // and declare a static prop on them.
 function convertChildToArr(child){
+    console.log(typeof child, isBaseInstance(child));
     if( Array.isArray(child) ){
         return child.map(convertChildToArr);
     }
@@ -61,15 +62,15 @@ class BaseNode {
             childType = childTypes[i];
             idx = childType.idx;
             emptyValue = childType.emptyValue;
-            childValue = childValues[idx];
-            this.children[idx] = childValue || emptyValue;
+            childValue = childValues[idx] || emptyValue;
+            this.children[idx] = childValue;
             this.__validities[idx] = childType.validate(childValue);
         }
-        // this.__updateCache();
+        this.__updateCache();
     }
 
     // can clone any node with new props
-    cloneNode(newPropMap={}){
+    mutateAndClone(newPropMap={}){
     	const {nodeName, children} = this;
     	const keys = Object.keys(newPropMap);
         const Ctr = getCtrOf(this);
@@ -93,7 +94,7 @@ class BaseNode {
     // . denotes nodes children
     // : denotes nodes children's children
     // @TODO: maybe rename this to clone deep ?
-    updateDeep(parts, updatedNode){
+    mutateDeep(parts, updatedNode){
     	const nodeAddress = parts.pop();
     	// need to visit even further
     	if( parts.length ){

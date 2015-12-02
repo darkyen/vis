@@ -14,9 +14,12 @@ export default class Validity{
     static merge(...validities){
         let isValid = validities.every(isValidFn);
         let reason = [];
+        let validity = 0;
+
         if( !isValid ){
             let validityLen = validities.length;
             for(let i = 0; i < validityLen; i++){
+                validity = validities[i];
                 if( validity.isInValid ){
                     reason.push(validities[i].reason);
                 }

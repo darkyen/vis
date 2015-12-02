@@ -26,9 +26,9 @@ export default def({
         // Identifier and Expression Explicitely here because
         // Lamba Expression cannot go in here imagine
         // foo + (lambda k : 3 * k)
-        Child('right').ofType(Expression)
+        Child('right').ofType(Expression).cannotBeEmpty()
             .notOfType(LambdaExpression),
-        Child('left').ofType(Expression)
+        Child('left').ofType(Expression).cannotBeEmpty()
             .notOfType(LambdaExpression)
     ]
 });

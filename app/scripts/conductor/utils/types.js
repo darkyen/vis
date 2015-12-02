@@ -10,8 +10,7 @@ function getCtrName(obj){
 }
 
 function isBaseInstance(obj){
-    const ctrName = getCtrName(obj);
-    return baseTypeNames.includes(ctrName);
+    return obj === undefined || baseTypeNames.includes(getCtrName(obj));
 }
 
 // This will only work for String, Number and Boolean
