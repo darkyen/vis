@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Transformer from '../Transformer';
 import BinaryExpression from '../../conductor/nodes/BinaryExpression';
-import NodeComponent from './NodeComponent';
+import createNodeComponent from './createNodeComponent';
 import {Textfield} from 'react-mdl';
 
 @Transformer(BinaryExpression)
@@ -10,13 +10,13 @@ class BinaryExpressionComponent extends Component{
         const {left, operator, right} = this.props;
         return  <div className="expression binary-expression">
                     <div className="binary-expression__left">
-                        <NodeComponent node={left} />
+                        {createNodeComponent(left)}
                     </div>
                     <div className="binary-expression__operator text">
                         {operator}
                     </div>
                     <div className="binary-expression__right">
-                        <NodeComponent node={right} />
+                        {createNodeComponent(right)}
                     </div>
                 </div>;
     }

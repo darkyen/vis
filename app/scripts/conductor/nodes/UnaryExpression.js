@@ -5,7 +5,7 @@ import LambdaExpression from './LambdaExpression';
 // @TODO: Document this.
 
 const validOperators = [
-    "!"
+    "!", '-'
 ];
 
 export default def({

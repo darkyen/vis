@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Transformer from '../Transformer';
 import CallStatement from '../../conductor/nodes/CallStatement';
-import NodeComponent from './NodeComponent';
+import createNodeComponent from './createNodeComponent';
 import ParameterComponent from './ParameterComponent';
 import {Textfield} from 'react-mdl';
 
@@ -12,9 +12,7 @@ class CallStatementComponent extends Component{
         return  <div className="statement call-statement">
                     <div className="text">call</div>
                     <div className="call-statement__name">
-                        <NodeComponent
-                            node={name}
-                        />
+                        {createNodeComponent(name)}
                     </div>
                     <div className="call-statement__parameters text text--with-paranthesis">
                         <ParameterComponent
