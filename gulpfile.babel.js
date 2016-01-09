@@ -4,7 +4,7 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import browserify from 'browserify';
 import babelify from 'babelify';
 import watchify from 'watchify';
-import browserSync from 'browser-sync';
+import {server} from 'electron-connect';
 import del from 'del';
 import {stream as wiredep} from 'wiredep';
 import source from 'vinyl-source-stream';
@@ -14,10 +14,11 @@ import gutil from 'gulp-util';
 import chalk from 'chalk';
 import _ from 'lodash';
 import bBuiltins from 'browserify/lib/builtins';
+import shell from 'gulp-shell';
 
 let isWatching = false;
 const $ = gulpLoadPlugins();
-const reload = browserSync.reload;
+const electron = server.create();
 
 gulp.task('styles', () => {
   return gulp.src('app/styles/*.scss')
@@ -83,30 +84,23 @@ var watchBundle = function(target, name='main.js', dest='.tmp/scripts') {
 function babelize(outputDir = '.tmp'){
   return () => {
 
-    let opts        = isWatching?watchify.args:{};
-    let extensions  = ['.js', '.json', '.babel'];
+    const opts        = isWatching?watchify.args:{};
 
-    opts.extensions = extensions;
     opts.debug      = true;
     opts.builtins   = _.assign({}, bBuiltins, {
         'fs': require.resolve('browserfs/dist/node/core/node_fs.js'),
         'path': require.resolve('bfs-path')
     });
-    
+
     let bundle      = browserify(opts);
 
     if( isWatching ){
       bundle = watchify(bundle);
     }
 
-    bundle.transform(babelify.configure({
-      stage: 0 ,
-      extensions: extensions,
-      experimental: true,
-      plugins: [require('babel-plugin-object-assign')]
-    }));
+    bundle.transform(babelify);
 
-    bundle.require('./app/scripts/main.babel', {
+    bundle.require('./app/scripts/main.js', {
       entry: true
     });
 
@@ -156,11 +150,8 @@ gulp.task('images', () => {
 });
 
 gulp.task('fonts', () => {
-  return gulp.src(require('main-bower-files')({
-    filter: '**/*.{eot,svg,ttf,woff,woff2}'
-  }).concat('app/fonts/**/*'))
+  return gulp.src('app/fonts')
     .pipe(gulp.dest('.tmp/fonts'))
-    .pipe(gulp.dest('dist/fonts'));
 });
 
 gulp.task('extras', () => {
@@ -180,57 +171,20 @@ gulp.task('setWatch', () => {
 });
 
 gulp.task('serve', ['setWatch', 'styles', 'babel', 'fonts'], () => {
-
-  browserSync({
-    notify: false,
-    host: '127.0.0.1',
-    port: 9000,
-    server: {
-      baseDir: ['.tmp', 'app'],
-      routes: {
-        '/bower_components': 'bower_components'
-      }
-    }
-  });
-
+  electron.start();
   gulp.watch([
     'app/*.html',
     '.tmp/scripts/**/*.js',
     'app/images/**/*',
     '.tmp/fonts/**/*'
-  ]).on('change', reload);
+  ]).on('change', electron.reload);
 
+  gulp.watch('electron/runner.js', electron.restart);
   gulp.watch('app/styles/**/*.scss', ['styles']);
   gulp.watch('app/fonts/**/*', ['fonts']);
   gulp.watch('bower.json', ['wiredep', 'fonts']);
 });
 
-gulp.task('serve:dist', () => {
-  browserSync({
-    notify: false,
-    port: 9000,
-    server: {
-      baseDir: ['dist']
-    }
-  });
-});
-
-gulp.task('serve:test', () => {
-  browserSync({
-    notify: false,
-    port: 9000,
-    ui: false,
-    server: {
-      baseDir: 'test',
-      routes: {
-        '/bower_components': 'bower_components'
-      }
-    }
-  });
-
-  gulp.watch('test/spec/**/*.js').on('change', reload);
-  gulp.watch('test/spec/**/*.js', ['lint:test']);
-});
 
 // inject bower components
 gulp.task('wiredep', () => {
@@ -250,11 +204,6 @@ gulp.task('wiredep', () => {
 
 gulp.task('build', ['babel', 'html', 'images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
-});
-
-gulp.task('deploy', ['build'], ()=>{
-  return gulp.src('dist/**/*')
-          .pipe(ghPages());
 });
 
 gulp.task('default', ['clean'], () => {

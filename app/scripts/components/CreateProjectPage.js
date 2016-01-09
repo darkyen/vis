@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import MDL from 'react-mdl';
 import ideActions from '../actions/ideActions';
 import userActions from '../actions/userActions';
 import Markdown from 'react-remarkable';

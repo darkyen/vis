@@ -2,17 +2,13 @@ import React, {Component} from 'react';
 import {Container} from 'flux/utils';
 import projectStore from '../stores/projectStore';
 
-import MDL, {Card, Button} from 'react-mdl';
-
 import Promise from 'bluebird';
 import superagent from 'superagent';
-import SuperPromise from 'superagent-promise';
-
+import conductor from '../conductor';
 import userStore from '../stores/userStore';
+import SuperPromise from 'superagent-promise';
 import userActions from '../actions/userActions';
 
-import conductor from '../conductor';
-import NodeComponent from './nodes/NodeComponent';
 
 
 let superPromise = SuperPromise(superagent, Promise);

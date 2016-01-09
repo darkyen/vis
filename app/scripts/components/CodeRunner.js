@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-
 class CodeRunner extends Component{
 	render(){
 		console.log(this.props);

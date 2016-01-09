@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import {DropTarget} from 'react-dnd';
-import ItemTypes from '../constants/ItemTypes';
-import classNames from 'classnames';
 import blockActions from '../actions/blockActions';
+import ItemTypes from '../constants/ItemTypes';
+import {DropTarget} from 'react-dnd';
+import classNames from 'classnames';
 import _ from 'lodash';
 
 const blockTarget = {

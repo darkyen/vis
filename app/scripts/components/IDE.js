@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
-import MDL from 'react-mdl';
 import SideBar from './SideBar';
 import {Container} from 'flux/utils';
 import CodeEditor from './CodeEditor';
 import CodeRunner from './CodeRunner';
 import fileStore from '../stores/fileStore';
 import {compileAndRun} from '../actions/ideActions';
+
 class IDE extends Component{
 	constructor(props){
 		super(props);
