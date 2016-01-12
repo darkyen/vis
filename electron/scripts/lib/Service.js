@@ -5,20 +5,20 @@ import {EventEmitter} from 'events';
 
 // If cordova is defined use our
 // custom backend over this one.
-if( cordova ){
+if( window && window.cordova ){
   const backend =  require('eshttp/lib/backend');
   const chromeBackend = require('./backends/chrome-tcp').default;
   backend.setBackend(chromeBackend);
 }else {
   const backend =  require('eshttp/lib/backend');
-  const nodeBackend =  window.require('eshttp/backends/backend-node');
+  const nodeBackend =  window.require('eshttp/backend/backend-node');
   backend.setBackend(nodeBackend);
 }
 
 const eshttp = require('eshttp/lib/eshttp');
 const response = new eshttp.HttpResponse(200, {
   'x-served-by': 'ESHTTP'
-}, `hello world from ${device.platform}`);
+}, `hello world from ${window.device?device.platform:'Node'}`);
 
 console.log(response);
 // Connect over HTTP and talk like a boss !
@@ -93,10 +93,10 @@ export class ZeroConfService extends EventEmitter{
   }
 
   advertise(){
-      if( cordova ){
+      if( window && window.cordova ){
         return this.__advertiseOnCordova();
       }
-      return this.__advertiseOnNode();
+      // return this.__advertiseOnNode();
   }
 
   createBrowser(){
@@ -107,7 +107,7 @@ export class ZeroConfService extends EventEmitter{
   }
 
   onRequest(request){
-    console.log('Request', request);
+    // console.log('Request', request);
     request.respondWith(response);
   }
 
