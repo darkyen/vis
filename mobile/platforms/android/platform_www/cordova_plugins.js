@@ -7,14 +7,6 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/com.cambiocreative.cordova.plugin.zeroconf/www/zeroconf.js",
-        "id": "com.cambiocreative.cordova.plugin.zeroconf.ZeroConf",
-        "pluginId": "com.cambiocreative.cordova.plugin.zeroconf",
-        "clobbers": [
-            "cambiocreative.CDVZeroConfig"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-chrome-apps-power/power.js",
         "id": "cordova-plugin-chrome-apps-power.power",
         "pluginId": "cordova-plugin-chrome-apps-power",
@@ -68,18 +60,26 @@ module.exports = [
         "clobbers": [
             "chrome.sockets.udp"
         ]
+    },
+    {
+        "file": "plugins/cordova-zeroconf-plugin/www/ZeroConf.js",
+        "id": "cordova-zeroconf-plugin.zeroconf",
+        "pluginId": "cordova-zeroconf-plugin",
+        "clobbers": [
+            "ZeroConf"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
     "cordova-plugin-whitelist": "1.2.0",
-    "com.cambiocreative.cordova.plugin.zeroconf": "1.0.9",
     "cordova-plugin-chrome-apps-power": "1.0.5-dev",
     "cordova-plugin-chrome-apps-common": "1.0.7",
     "cordova-plugin-chrome-apps-sockets-tcp": "1.3.5-dev",
     "cordova-plugin-chrome-apps-sockets-tcpserver": "1.2.4-dev",
-    "cordova-plugin-chrome-apps-sockets-udp": "1.2.3-dev"
+    "cordova-plugin-chrome-apps-sockets-udp": "1.2.3-dev",
+    "cordova-zeroconf-plugin": "1.2.0"
 }
 // BOTTOM OF METADATA
 });

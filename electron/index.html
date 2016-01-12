@@ -17,9 +17,6 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300" />
-
-    <script src="https://cdn.auth0.com/js/lock-7.9.min.js"></script>
-
   </head>
   <body>
     <div id="foo"></div>
@@ -34,8 +31,10 @@
       ga('create','UA-XXXXX-X');ga('send','pageview');
     </script>
 
-    <!-- build:js scripts/main.js -->
-    <script src="scripts/main.js"></script>
-    <!-- endbuild -->
+    <script>
+      // support electron here !
+      require('babel-core/register');
+      require('./scripts/main.js');
+    </script>
   </body>
 </html>

@@ -1,12 +1,14 @@
 // Updated by king abhishek hingnikar
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
+
+// Babel and friends
 import browserify from 'browserify';
 import babelify from 'babelify';
 import watchify from 'watchify';
+
 import {server} from 'electron-connect';
 import del from 'del';
-import {stream as wiredep} from 'wiredep';
 import source from 'vinyl-source-stream';
 import ghPages from 'gulp-gh-pages';
 import buffer from 'vinyl-buffer';
@@ -32,7 +34,6 @@ gulp.task('styles', () => {
     .pipe($.autoprefixer({browsers: ['last 10 versions']}))
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest('.tmp/styles'))
-    .pipe(reload({stream: true}));
 });
 
 function lint(files, options) {
@@ -85,13 +86,7 @@ function babelize(outputDir = '.tmp'){
   return () => {
 
     const opts        = isWatching?watchify.args:{};
-
     opts.debug      = true;
-    opts.builtins   = _.assign({}, bBuiltins, {
-        'fs': require.resolve('browserfs/dist/node/core/node_fs.js'),
-        'path': require.resolve('bfs-path')
-    });
-
     let bundle      = browserify(opts);
 
     if( isWatching ){
@@ -100,7 +95,7 @@ function babelize(outputDir = '.tmp'){
 
     bundle.transform(babelify);
 
-    bundle.require('./app/scripts/main.js', {
+    bundle.require('app/scripts/main.js', {
       entry: true
     });
 
@@ -172,35 +167,22 @@ gulp.task('setWatch', () => {
 
 gulp.task('serve', ['setWatch', 'styles', 'babel', 'fonts'], () => {
   electron.start();
+
   gulp.watch([
-    'app/*.html',
-    '.tmp/scripts/**/*.js',
-    'app/images/**/*',
-    '.tmp/fonts/**/*'
+    'electron/*.html',
+    'electron/styles/**/*.css',
+    'electron/scripts/**/*.js',
+    'electron/images/**/*',
+    'electron/fonts/**/*'
   ]).on('change', electron.reload);
 
   gulp.watch('electron/runner.js', electron.restart);
+
+  // do the good work of updating stuff
   gulp.watch('app/styles/**/*.scss', ['styles']);
   gulp.watch('app/fonts/**/*', ['fonts']);
-  gulp.watch('bower.json', ['wiredep', 'fonts']);
 });
 
-
-// inject bower components
-gulp.task('wiredep', () => {
-  gulp.src('app/styles/*.scss')
-    .pipe(wiredep({
-      ignorePath: /^(\.\.\/)+/
-    }))
-    .pipe(gulp.dest('app/styles'));
-
-  gulp.src('app/*.html')
-    .pipe(wiredep({
-      exclude: ['bootstrap-sass'],
-      ignorePath: /^(\.\.\/)*\.\./
-    }))
-    .pipe(gulp.dest('app'));
-});
 
 gulp.task('build', ['babel', 'html', 'images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));

@@ -1,1 +1,118 @@
-$var: Lila 
+$var: Lila;
+
+$header-color: #fff;
+$app-background: #f0f0f0;
+
+*{
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Roboto';
+  background: $app-background;
+  padding: 0px;
+  margin: 0px;
+}
+
+
+h1,h2,h3,h4,h5,h6{
+  font-family: 'Roboto';
+}
+
+@media(min-width: 768px){
+  .app {
+    border: 1px solid $header-color;
+  }
+}
+
+.app {
+  flex-direction: column;
+  position: absolute;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+
+  &__content{
+    padding: 10px;
+    flex: 1;
+  }
+
+  &__header-info{
+    background: darken($header-color, 10%);
+  }
+}
+
+.header{
+  position: relative;
+  height: 64px;
+
+  &__content, &__tint{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+  }
+
+  &__tint{
+    opacity: 0.95;
+    background: $header-color;
+    -webkit-app-region: drag;
+
+    &--flat{
+      opacity: 1;
+    }
+
+    &--frosty{
+      -webkit-filter: blur(5px);
+    }
+  }
+
+  &__content{
+    -webkit-app-region: no-drag;
+    color: #f0f0f0;
+    z-index: 1000;
+    padding: 10px;
+  }
+
+  &__row{
+    display: flex;
+    width: 100%;
+  }
+
+  &__hamburger-button{
+    width: 64px;
+  }
+
+  &__expand{
+    flex: 1;
+  }
+
+  &__controls{
+    width: 320px;
+  }
+}
+
+.full-width{
+  width: 100%;
+}
+
+$control-font-size: 18px;
+$control-height: 42px;
+$control-padding: 6px 12px;
+.input, .button{
+  height: $control-height;
+  padding: $control-padding;
+  font-size: $control-font-size;
+  border: 0px;
+}
+
+.button{
+  background: #fff;
+}
+
+.button-group{
+
+}

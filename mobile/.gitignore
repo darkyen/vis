@@ -34,3 +34,6 @@ resources/signing
 #extras
 www/scripts
 www/styles
+
+#cordova
+plugins/
